@@ -2,4 +2,5 @@
 .classPath
 .settings
 build/
+!.project
 bin/
