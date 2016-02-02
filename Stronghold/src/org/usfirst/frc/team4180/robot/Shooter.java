@@ -25,5 +25,19 @@ public class Shooter {
 	}
 	
 	//Set Pneumatics???
-
+	
+	//Turns the piston solenoid on forwards
+	public void pistonSolenoidForward() {
+		shooterSolenoid.set(DoubleSolenoid.Value.kForward);
+	}
+	
+	//Turns the piston solenoid off
+	public void pistonSolenoidOff() {
+		shooterSolenoid.set(DoubleSolenoid.Value.kOff);
+	}
+	
+	//Turns the piston solenoid on backwards
+	public void pistonSolenoidReverse() {
+		shooterSolenoid.set(DoubleSolenoid.Value.kReverse);
+	}
 }
