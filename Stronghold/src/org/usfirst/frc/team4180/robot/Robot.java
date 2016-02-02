@@ -1,5 +1,4 @@
-//yay! it all works...
-package src.org.usfirst.frc.team4180.robot;
+package org.usfirst.frc.team4180.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 

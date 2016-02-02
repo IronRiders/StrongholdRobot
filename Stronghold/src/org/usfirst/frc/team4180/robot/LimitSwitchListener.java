@@ -1,4 +1,4 @@
-package src.org.usfirst.frc.team4180.robot;
+package org.usfirst.frc.team4180.robot;
 
 public interface LimitSwitchListener {
 	
