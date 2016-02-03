@@ -27,5 +27,17 @@ public class Shooter {
 		shooterSolenoid.set(state);
 	}
 	
+	public void lowerShooter() {
+		
+	}
+	
+	public void raiseShooter() {
+		
+	}
+	
+	//Maybe make this take a speed, or have it fire based on how long you hold a button
+	public void fire() {
+		
+	}
 //We may be switching to double solenoids later
 }
