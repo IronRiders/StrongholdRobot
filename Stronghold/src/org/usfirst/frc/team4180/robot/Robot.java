@@ -15,7 +15,7 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-
+    	Shooter shooter = new Shooter(SHOOTER_TALON_PORT, SHOOTER_SOLENOID);
     }
 
     /**
@@ -39,4 +39,6 @@ public class Robot extends IterativeRobot {
     
     }
     
+	private static final int SHOOTER_TALON_PORT = 0; //place holder value
+	private static final int SHOOTER_SOLENOID = 0;  //place holder value
 }

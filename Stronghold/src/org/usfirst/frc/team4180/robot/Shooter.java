@@ -9,15 +9,13 @@ public class Shooter {
 //	there will be one pneumatic piston which moves in and out (single solenoid)
 //	there will be one motor (Talon SRX) which will turn in both directions
 //	motor will need to be controlled by a button
-	private static final int SHOOTER_TALON_PORT = 0; //place holder value
-	private static final int SHOOTER_SOLENOID = 0;  //place holder value
 	
 	private TalonSRX shooterTalon;
 	private Solenoid shooterSolenoid;
 	
-	public Shooter() {
-		shooterTalon = new TalonSRX(SHOOTER_TALON_PORT);
-		shooterSolenoid = new Solenoid(SHOOTER_SOLENOID);
+	public Shooter(int talonPort, int solenoidPort) {
+		shooterTalon = new TalonSRX(talonPort);
+		shooterSolenoid = new Solenoid(solenoidPort);
 	}
 	
 	public void setShooterTalon(double shooterTalonSpeed){
