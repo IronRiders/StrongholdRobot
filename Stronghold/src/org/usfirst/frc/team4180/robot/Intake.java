@@ -41,7 +41,7 @@ public class Intake {
 		//wait until arm raised
 		setAngleTalon(0);
 	}
-	
+
 	public void lowerArm() {
 		//set motors speed to -1
 		//wait until arm is lowered
@@ -52,13 +52,13 @@ public class Intake {
 		//wait until arm lowered
 		setAngleTalon(0);
 	}
-	
+
 	public void stopArm() {
 		//set speed to 0
 		//probably won't need this
 		setAngleTalon(0);
 	}
-	
+
 	public void rollOut() {
 		//raise the intake arm
 		//set the intake motor to reverse

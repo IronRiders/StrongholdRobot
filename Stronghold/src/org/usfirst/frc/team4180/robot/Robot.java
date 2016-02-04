@@ -12,15 +12,15 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class Robot extends IterativeRobot {
 
-	private static final int SHOOTER_TALON_PORT = 1; //place holder value
-	private static final int SHOOTER_SOLENOID_PORT = 2;  //place holder value
-	private static final int INTAKE_TALON_PORT_1 = 3; //place holder value
-	private static final int INTAKE_TALON_PORT_2 = 4; //place holder value
-	private static final int DRIVETRAIN_VIC_PORT_LEFT = 5; 
-	private static final int DRIVETRAIN_VIC_PORT_RIGHT = 6; 
+	//place holder values
+	private static final int SHOOTER_TALON_PORT = -1;
+	private static final int SHOOTER_SOLENOID_PORT = -1;
+	private static final int INTAKE_TALON_PORT_1 = -1;
+	private static final int INTAKE_TALON_PORT_2 = -1;
+	private static final int DRIVETRAIN_VIC_PORT_LEFT = -1; 
+	private static final int DRIVETRAIN_VIC_PORT_RIGHT = -1; 
 	
-	private Shooter shooter;
-	private Intake intake;
+	private ShooterIntake shooter_intake;
 	private DriveTrain driveTrain;
 	private Joystick joystick; //placeholder for a joystick
 	
@@ -31,12 +31,12 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 	    //how to use the new joystick:
     	//intitalization:	
-    	//j = new Joystick(0,(joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
+    	//j = new Joystick(PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
 		//Adding a Button
-    	//j.addButton(1, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0));
+    	//j.addButton(BUTTON_NUMBER, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0));
 		
-    	shooter = new Shooter(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT);
-    	intake = new Intake(INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
+		shooter_intake = new ShooterIntake(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT,
+										   INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT);
     }
 
