@@ -15,8 +15,15 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-    //	Shooter shooter = new Shooter(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT);
-    //	Intake intake = new Intake(INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
+    //how to use the new joystick:
+    	//intitalization:	
+    	//j = new Joystick(0,(joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
+		//Adding a Button
+    	//j.addButton(1, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0));
+   
+    	
+    	
+  
     }
 
     /**
