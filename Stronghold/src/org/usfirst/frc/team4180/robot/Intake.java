@@ -26,6 +26,25 @@ public class Intake {
 	}
 	
 	public void intakeBall() {
-		
+		// turn on/off intake motor with toggle 
+		// only one direction
+		setRollerTalon(1);
+	}
+	
+	public void raiseArm() {
+		// raise arm with button press
+	}
+	
+	public void lowerArm() {
+		// lower arm with button release
+	}
+	
+	public void stopArm() {
+		//set speed to 0
+	}
+	
+	public void rollOut() {
+		//turn  on/off intake motor with toggle
+		// goes in opposite direction
 	}
 }
