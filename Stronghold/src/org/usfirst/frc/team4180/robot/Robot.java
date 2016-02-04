@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4180.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -14,9 +15,23 @@ public class Robot extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
-    public void robotInit() {
-    	Shooter shooter = new Shooter(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT);
-    	Intake intake = new Intake(INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
+   
+	private static final int SHOOTER_TALON_PORT = 0; //place holder value
+	private static final int SHOOTER_SOLENOID_PORT = 0;  //place holder value
+	private static final int INTAKE_TALON_PORT_1 = 0; //place holder value
+	private static final int INTAKE_TALON_PORT_2 = 0; //place holder value
+	private static final int DRIVETRAIN_VIC_PORT_LEFT = 0; 
+	private static final int DRIVETRAIN_VIC_PORT_RIGHT = 0; 
+	
+	private Shooter shooter;
+	private Intake intake;
+	private DriveTrain driveTrain;
+	private Joystick joystick; //placeholder for a joystick
+	
+	public void robotInit() {
+    	shooter = new Shooter(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT);
+    	intake = new Intake(INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
+    	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT);
     }
 
     /**
@@ -39,9 +54,4 @@ public class Robot extends IterativeRobot {
     public void testPeriodic() {
     
     }
-    
-	private static final int SHOOTER_TALON_PORT = 0; //place holder value
-	private static final int SHOOTER_SOLENOID_PORT = 0;  //place holder value
-	private static final int INTAKE_TALON_PORT_1 = 0; //place holder value
-	private static final int INTAKE_TALON_PORT_2 = 0; //place holder value
 }

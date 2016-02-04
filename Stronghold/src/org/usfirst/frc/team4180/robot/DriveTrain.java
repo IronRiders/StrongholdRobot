@@ -5,9 +5,6 @@ import edu.wpi.first.wpilibj.VictorSP;
 //import statement needed
 
 public class DriveTrain {
-	// Placeholder Values
-	int LEFT_PORT = 0;
-	int RIGHT_PORT = 1;
 
 	// declare Vics
 	private VictorSP leftVic;
@@ -18,9 +15,9 @@ public class DriveTrain {
 	private double yPos;
 
 	// initialize Vics and variables
-	public DriveTrain() {
-		leftVic = new VictorSP(LEFT_PORT);
-		rightVic = new VictorSP(RIGHT_PORT);
+	public DriveTrain(int leftPort, int rightPort) {
+		leftVic = new VictorSP(leftPort);
+		rightVic = new VictorSP(rightPort);
 		xPos = 0.0;
 		yPos = 0.0;
 	}
