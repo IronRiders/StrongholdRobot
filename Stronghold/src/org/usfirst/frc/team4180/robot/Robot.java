@@ -15,8 +15,8 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-    	Shooter shooter = new Shooter(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT);
-    	Intake intake = new Intake(INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
+    //	Shooter shooter = new Shooter(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT);
+    //	Intake intake = new Intake(INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
     }
 
     /**
@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
     }
     
 	private static final int SHOOTER_TALON_PORT = 0; //place holder value
-	private static final int SHOOTER_SOLENOID_PORT = 0;  //place holder value
-	private static final int INTAKE_TALON_PORT_1 = 0; //place holder value
-	private static final int INTAKE_TALON_PORT_2 = 0; //place holder value
+	private static final int SHOOTER_SOLENOID_PORT = 1;  //place holder value
+	private static final int INTAKE_TALON_PORT_1 = 2; //place holder value
+	private static final int INTAKE_TALON_PORT_2 = 3; //place holder value
 }
