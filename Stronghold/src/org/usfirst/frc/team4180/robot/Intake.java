@@ -32,19 +32,38 @@ public class Intake {
 	}
 	
 	public void raiseArm() {
-		// raise arm with button press
+		//set motors speed to 1
+		//wait until arm is raised
+		//set motor speed to 0
+		//this will be able to stop at any point with stopArm method
+		
+		setAngleTalon(1);
+		//wait until arm raised
+		setAngleTalon(0);
 	}
 	
 	public void lowerArm() {
-		// lower arm with button release
+		//set motors speed to -1
+		//wait until arm is lowered
+		//set motor speed to 0
+		//this will be able to stop at any point with stopArm method
+		
+		setAngleTalon(-1);
+		//wait until arm lowered
+		setAngleTalon(0);
 	}
 	
 	public void stopArm() {
 		//set speed to 0
+		//probably won't need this
+		setAngleTalon(0);
 	}
 	
 	public void rollOut() {
-		//turn  on/off intake motor with toggle
-		// goes in opposite direction
+		//raise the intake arm
+		//set the intake motor to reverse
+		//set 
+		raiseArm();
+		setRollerTalon(-1);
 	}
 }

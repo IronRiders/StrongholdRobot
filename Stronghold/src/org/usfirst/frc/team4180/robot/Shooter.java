@@ -28,11 +28,15 @@ public class Shooter {
 	}
 	
 	public void lowerShooter() {
-		
+		// set motors speed to -1
+		// wait until arm is lowered
+		// set motor speed to 0
 	}
 	
 	public void raiseShooter() {
-		
+		// set motors speed to 1
+		// wait until arm is raised
+		// set motor speed to 0
 	}
 	
 	//Maybe make this take a speed, or have it fire based on how long you hold a button
