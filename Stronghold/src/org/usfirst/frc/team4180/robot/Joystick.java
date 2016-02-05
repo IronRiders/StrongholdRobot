@@ -2,7 +2,11 @@ package org.usfirst.frc.team4180.robot;
 
 
 import java.util.function.Consumer;
-
+/**
+* @author Alex MacLean
+* @author Tobias Rohde
+* @author Brendan Murphy
+*/
 public class Joystick extends edu.wpi.first.wpilibj.Joystick {
 
 	public Button[] buttons = new Button[11];
