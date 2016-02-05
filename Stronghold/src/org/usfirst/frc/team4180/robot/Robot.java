@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
 	
 	private ShooterIntake shooter_intake;
 	private DriveTrain driveTrain;
-	private Joystick joystick; //placeholder for a joystick
+	private Joystick joystick;
 	
     /**
      * This function is run when the robot is first started up and should be
