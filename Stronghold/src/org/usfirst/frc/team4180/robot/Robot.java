@@ -20,7 +20,7 @@ public class Robot extends IterativeRobot {
 	private static final int DRIVETRAIN_VIC_PORT_LEFT = -1; 
 	private static final int DRIVETRAIN_VIC_PORT_RIGHT = -1; 
 	
-	private ShooterIntake shooter_intake;
+	private ShooterIntake shooterIntake;
 	private DriveTrain driveTrain;
 	private Joystick joystick; //placeholder for a joystick
 	
@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
 		//Adding a Button
     	//j.addButton(BUTTON_NUMBER, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0));
 		
-		shooter_intake = new ShooterIntake(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT,
+		shooterIntake = new ShooterIntake(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT,
 										   INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT);
     }
