@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
 	
 	private ShooterIntake shooter_intake;
 	private DriveTrain driveTrain;
-	private Joystick joystick;
+	private Joystick joystick1;
 	
     /**
      * This function is run when the robot is first started up and should be
@@ -31,14 +31,15 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 	    //how to use the new joystick:
     	//intitalization:	
-    	//j = new Joystick(PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
+    	//joystick1 = new Joystick(1, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
 		//Adding a Button
     	//j.addButton(BUTTON_NUMBER, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0));
 		
 		shooter_intake = new ShooterIntake(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT,
 										   INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT);
-    }
+    
+	}
 
     /**
      * This function is called periodically during autonomous
