@@ -51,10 +51,17 @@ public class ShooterIntake {
 		setShooterSolenoid(true); //check which is which
 	}
 	
+	//SET UP: ball is held against shooting wheels and shooter is up (and intake is raised up by drive)
 	public void shoot() {
-		setShooterTalon(1); 
+		setShooterTalon(-1); //pushes ball into intake by reversing shooter wheels
+		//after a moment
+		setShooterTalon(1); //get shooter wheels up to speed
+		//after a moment
+		setRollerTalon(1); //intake motors reversed (?) to push ball back into shooter wheels
+		//after ball has been shot
+		stopShoot();
+		stopIntake();
 		//check whether negative or positive is shooting and test for which speed
-		//this should probably call some other methods. need to get procedure from design/hardware
 	}
 	
 	public void stopShoot(){
