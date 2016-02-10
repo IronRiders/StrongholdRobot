@@ -11,7 +11,9 @@ public class ShooterIntake {
 //	Information we have from Design/Hardware about Intake:
 //	One motor (Talon SRX) which turns in both directions for rollers
 //	One motor (Or maybe pneumatics) which turns in both directions for angle
-		
+
+//  NOTE: Orientations of motors and pneumatics should be correct according to design and hardware
+//  NOTE: We should test for which speed works best for the different tasks
 	
 	private TalonSRX shooterTalon;
 	private Solenoid elevationSolenoid;
@@ -44,11 +46,11 @@ public class ShooterIntake {
 	
 	//Shooter methods
 	public void lowerShooter() {
-		setShooterSolenoid(false); //check which is which
+		setShooterSolenoid(false);
 	}
 	
 	public void raiseShooter() {
-		setShooterSolenoid(true); //check which is which
+		setShooterSolenoid(true);
 	}
 	
 	//SET UP: ball is held against shooting wheels and shooter is up (and intake is raised up by drive)
@@ -57,11 +59,11 @@ public class ShooterIntake {
 		//after a moment
 		setShooterTalon(1); //get shooter wheels up to speed
 		//after a moment
-		setRollerTalon(1); //intake motors reversed (?) to push ball back into shooter wheels
+		setRollerTalon(1); //intake motors reversed (aka their normal direction???) to push ball back into shooter wheels
 		//after ball has been shot
 		stopShoot();
 		stopIntake();
-		//check whether negative or positive is shooting and test for which speed
+		//test for what speeds will be best for intaking and shooting
 	}
 	
 	public void stopShoot(){
@@ -69,16 +71,15 @@ public class ShooterIntake {
 	}
 	
 	//Intake methods
-	
-	//are we going to base how long to raise/lower for off of a timer? Or a limit switch?
+	//Driver gets to control raising and lowering intake
 	public void raiseIntake() {
 		setAngleTalon(1); 
-		//check whether negative or positive is raising and test for which speed
+		//test for which speed
 	}
 	
 	public void lowerIntake() {
 		setAngleTalon(-1); 
-		//check whether negative or positive is lowering and test for which speed
+		//test for which speed
 	}
 	
 	public void stopIntakeArm(){
@@ -87,18 +88,15 @@ public class ShooterIntake {
 	
 	public void intakeOn(){
 		setRollerTalon(1);
-		//check whether negative or positive is intake and test for which speed
+		//test for which speed would be best for intaking  
 	}
 	
 	public void reverseIntake(){
 		setRollerTalon(-1);
-		//check whether negative or positive is reverseIntake and test for which speed
+		//test for which speed would be best for reverseIntaking
 	}	
 	
 	public void stopIntake(){
 		setRollerTalon(0);
 	}
-	
-	
-	//	We may be switching the shooter solenoids to double solenoids later
 }
