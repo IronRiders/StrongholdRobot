@@ -45,8 +45,11 @@ public class Robot extends IterativeRobot {
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT);
     	
     	drivingJoystick = new Joystick(DRIVING_JOYSTICK_PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
-    	shooterIntakeJoystick = new Joystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo[1]) -> shooterIntake.setIntakeArmSpeed(joystickInfo[1]));
-    
+    	shooterIntakeJoystick = new Joystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {
+    		shooterIntake.setIntakeArmSpeed(joystickInfo[1]);
+    		shooterIntake.shoot(joystickInfo[2]);
+    	});
+    	
     	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> shooterIntake.stopShoot());
     	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intakeOn(), () -> shooterIntake.stopIntake());
     	shooterIntakeJoystick.addButton(3, () -> shooterIntake.reverseIntake(), () -> shooterIntake.stopIntake());

@@ -54,10 +54,10 @@ public class ShooterIntake {
 	}
 	
 	//SET UP: ball is held against shooting wheels and shooter is up (and intake is raised up by drive)
-	public void shoot() {
+	public void shoot(double shootSpeed) {
 		setShooterTalon(-1); //pushes ball into intake by reversing shooter wheels
 		//after a moment
-		setShooterTalon(1); //get shooter wheels up to speed
+		setShooterTalon(shootSpeed); //get shooter wheels up to speed
 		//after a moment
 		setRollerTalon(1); //intake motors reversed (aka their normal direction???) to push ball back into shooter wheels
 		//after ball has been shot
