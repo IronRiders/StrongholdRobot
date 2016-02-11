@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4180.robot;
 
+import java.util.function.Consumer;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -19,10 +21,13 @@ public class Robot extends IterativeRobot {
 	private static final int INTAKE_TALON_PORT_2 = -1;
 	private static final int DRIVETRAIN_VIC_PORT_LEFT = -1; 
 	private static final int DRIVETRAIN_VIC_PORT_RIGHT = -1; 
+	private static final int DRIVING_JOYSTICK_PORT = -1; 
+	private static final int SHOOTERINTAKE_JOYSTICK_PORT = -1; 
 	
 	private ShooterIntake shooterIntake;
 	private DriveTrain driveTrain;
-	private Joystick joystick; //placeholder for a joystick
+	private Joystick drivingJoystick;
+	private Joystick shooterIntakeJoystick;
 	
     /**
      * This function is run when the robot is first started up and should be
@@ -33,11 +38,20 @@ public class Robot extends IterativeRobot {
     	//intitalization:	
     	//j = new Joystick(PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
 		//Adding a Button
-    	//j.addButton(BUTTON_NUMBER, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0));
+    	//j.addButton(BUTTON_NUMBER, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0)); 
 		
 		shooterIntake = new ShooterIntake(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT,
 										   INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT);
+    	
+    	drivingJoystick = new Joystick(DRIVING_JOYSTICK_PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
+    	shooterIntakeJoystick = new Joystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo[1]) -> shooterIntake.setIntakeArmSpeed(joystickInfo[1]));
+    
+    	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> shooterIntake.stopShoot());
+    	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intakeOn(), () -> shooterIntake.stopIntake());
+    	shooterIntakeJoystick.addButton(3, () -> shooterIntake.reverseIntake(), () -> shooterIntake.stopIntake());
+    	shooterIntakeJoystick.addButton(4, () -> shooterIntake.raiseShooter(), () -> {});
+    	shooterIntakeJoystick.addButton(5, () -> shooterIntake.lowerShooter(), () -> {});
     }
 
     /**

@@ -12,12 +12,10 @@ public class Joystick extends edu.wpi.first.wpilibj.Joystick {
 	public Joystick(int port, Consumer<double[]> joystickListener) {
 		super(port); 	
 		this.joystickListener = joystickListener;
-		//Initialize buttons
-		
 	}
-	//creates a button listener and addes it to the button array (overwrites older listeners) 
-	public void addButton(int port, Runnable onKeyDown, Runnable onKeyUp){
-		buttons[port-1] = new Button(onKeyDown, onKeyUp);
+	
+	public void addButton(int buttonNum, Runnable onKeyDown, Runnable onKeyUp){
+		buttons[buttonNum-1] = new Button(onKeyDown, onKeyUp);
 	}
 	
 	public void listen() {

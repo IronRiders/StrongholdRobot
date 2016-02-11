@@ -72,20 +72,23 @@ public class ShooterIntake {
 	
 	//Intake methods
 	//Driver gets to control raising and lowering intake
-	public void raiseIntake() {
-		setAngleTalon(1); 
-		//test for which speed
+	public void setIntakeArmSpeed(double intakeArmSpeed) {
+		setAngleTalon(intakeArmSpeed);
 	}
-	
-	public void lowerIntake() {
-		setAngleTalon(-1); 
-		//test for which speed
-	}
-	
-	public void stopIntakeArm(){
-		setAngleTalon(0); 
-	}
-	
+//	public void raiseIntake() {
+//		setAngleTalon(1); 
+//		//test for which speed
+//	}
+//	
+//	public void lowerIntake() {
+//		setAngleTalon(-1); 
+//		//test for which speed
+//	}
+//	
+//	public void stopIntakeArm(){
+//		setAngleTalon(0); 
+//	}
+//	
 	public void intakeOn(){
 		setRollerTalon(1);
 		//test for which speed would be best for intaking  
