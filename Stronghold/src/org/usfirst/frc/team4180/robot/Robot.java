@@ -26,8 +26,8 @@ public class Robot extends IterativeRobot {
 	
 	private ShooterIntake shooterIntake;
 	private DriveTrain driveTrain;
-	private Joystick drivingJoystick;
-	private Joystick shooterIntakeJoystick;
+	private LambdaJoystick drivingJoystick;
+	private LambdaJoystick shooterIntakeJoystick;
 	
     /**
      * This function is run when the robot is first started up and should be
@@ -43,9 +43,9 @@ public class Robot extends IterativeRobot {
 		shooterIntake = new ShooterIntake(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT,
 										   INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT);
-    	
-    	drivingJoystick = new Joystick(DRIVING_JOYSTICK_PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
-    	shooterIntakeJoystick = new Joystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {
+    	 	
+    	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
+    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {
     		shooterIntake.setIntakeArmSpeed(joystickInfo[1]);
     		shooterIntake.shoot(joystickInfo[2]);
     	});

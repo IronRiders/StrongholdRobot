@@ -3,13 +3,13 @@ package org.usfirst.frc.team4180.robot;
 
 import java.util.function.Consumer;
 
-public class Joystick extends edu.wpi.first.wpilibj.Joystick {
+public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 
 	public Button[] buttons = new Button[11];
 	//This checks if the joystick is being used for movement or something else
 	Consumer<double[]> joystickListener;
 	
-	public Joystick(int port, Consumer<double[]> joystickListener) {
+	public LambdaJoystick(int port, Consumer<double[]> joystickListener) {
 		super(port); 	
 		this.joystickListener = joystickListener;
 	}
