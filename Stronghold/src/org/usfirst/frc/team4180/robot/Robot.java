@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,6 +25,8 @@ public class Robot extends IterativeRobot {
 	private static final int DRIVING_JOYSTICK_PORT = -1; 
 	private static final int SHOOTERINTAKE_JOYSTICK_PORT = -1; 
 	
+	public static final Timer TIMER = new Timer();
+	
 	private ShooterIntake shooterIntake;
 	private DriveTrain driveTrain;
 	private LambdaJoystick drivingJoystick;
@@ -34,6 +37,8 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
 	public void robotInit() {
+		TIMER.start();
+		
 	    //how to use the new joystick:
     	//intitalization:	
     	//j = new Joystick(PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
@@ -47,7 +52,7 @@ public class Robot extends IterativeRobot {
     	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
     	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {
     		shooterIntake.setIntakeArmSpeed(joystickInfo[1]);
-    		shooterIntake.shoot(joystickInfo[2]);
+    		shooterIntake.shooterSpeed = joystickInfo[2];
     	});
     	
     	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> shooterIntake.stopShoot());
@@ -61,20 +66,20 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-
+    	
     }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        
+    	
     }
     
     /**
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-    
+    	
     }
 }

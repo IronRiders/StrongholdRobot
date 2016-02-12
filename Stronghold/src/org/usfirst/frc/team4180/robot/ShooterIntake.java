@@ -20,6 +20,8 @@ public class ShooterIntake {
 	private TalonSRX intakeAngle;
 	private TalonSRX intakeRoller;
 	
+	public double shooterSpeed = 0;
+	
 	public ShooterIntake(int talonPort, int solenoidPort, int rollerTalonPort, int angleTalonPort) {
 		shooterTalon = new TalonSRX(talonPort);
 		elevationSolenoid = new Solenoid(solenoidPort);
@@ -54,13 +56,16 @@ public class ShooterIntake {
 	}
 	
 	//SET UP: ball is held against shooting wheels and shooter is up (and intake is raised up by drive)
-	public void shoot(double shootSpeed) {
+	public void shoot() {
 		setShooterTalon(-1); //pushes ball into intake by reversing shooter wheels
-		//after a moment
-		setShooterTalon(shootSpeed); //get shooter wheels up to speed
-		//after a moment
+		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1; System.out.println("Time = " + Robot.TIMER.get()))
+		//-1 is a place holder value, we need to test for time
+		setShooterTalon(shooterSpeed); //get shooter wheels up to speed
+		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1; System.out.println("Time = " + Robot.TIMER.get()))
+		//-1 is a place holder value, we need to test for time
 		setRollerTalon(1); //intake motors reversed (aka their normal direction???) to push ball back into shooter wheels
-		//after ball has been shot
+		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1; System.out.println("Time = " + Robot.TIMER.get()))
+		//-1 is a place holder value, we need to test for time
 		stopShoot();
 		stopIntake();
 		//test for what speeds will be best for intaking and shooting
@@ -75,20 +80,7 @@ public class ShooterIntake {
 	public void setIntakeArmSpeed(double intakeArmSpeed) {
 		setAngleTalon(intakeArmSpeed);
 	}
-//	public void raiseIntake() {
-//		setAngleTalon(1); 
-//		//test for which speed
-//	}
-//	
-//	public void lowerIntake() {
-//		setAngleTalon(-1); 
-//		//test for which speed
-//	}
-//	
-//	public void stopIntakeArm(){
-//		setAngleTalon(0); 
-//	}
-//	
+
 	public void intakeOn(){
 		setRollerTalon(1);
 		//test for which speed would be best for intaking  
