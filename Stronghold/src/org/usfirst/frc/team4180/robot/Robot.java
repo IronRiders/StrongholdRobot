@@ -16,16 +16,16 @@ import edu.wpi.first.wpilibj.Timer;
 public class Robot extends IterativeRobot {
 
 	//place holder values
-	private static final int SHOOTER_TALON_PORT = -1;
-	private static final int SHOOTER_SOLENOID_PORT = -1;
-	private static final int INTAKE_TALON_PORT_1 = -1;
-	private static final int INTAKE_TALON_PORT_2 = -1;
-	private static final int DRIVETRAIN_VIC_PORT_LEFT = -1; 
-	private static final int DRIVETRAIN_VIC_PORT_RIGHT = -1; 
-	private static final int DRIVING_JOYSTICK_PORT = -1; 
-	private static final int GEAR_SHIFTING_PORT_1 = -1;
-	private static final int GEAR_SHIFTING_PORT_2 = -1;
-	private static final int SHOOTERINTAKE_JOYSTICK_PORT = -1; 
+	private static final int SHOOTER_TALON_PORT = 1;
+	private static final int SHOOTER_SOLENOID_PORT = 2;
+	private static final int INTAKE_TALON_PORT_1 = 3;
+	private static final int INTAKE_TALON_PORT_2 = 4;
+	private static final int DRIVETRAIN_VIC_PORT_LEFT = 5; 
+	private static final int DRIVETRAIN_VIC_PORT_RIGHT = 6; 
+	private static final int DRIVING_JOYSTICK_PORT = 7; 
+	private static final int GEAR_SHIFTING_PORT_1 = 8;
+	private static final int GEAR_SHIFTING_PORT_2 = 9;
+	private static final int SHOOTERINTAKE_JOYSTICK_PORT = 0; 
 	
 	public static final Timer TIMER = new Timer();
 	
