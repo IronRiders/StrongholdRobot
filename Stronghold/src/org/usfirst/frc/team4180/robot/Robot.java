@@ -63,6 +63,7 @@ public class Robot extends IterativeRobot {
     	shooterIntakeJoystick.addButton(3, () -> shooterIntake.reverseIntake(), () -> shooterIntake.stopIntake());
     	shooterIntakeJoystick.addButton(4, () -> shooterIntake.raiseShooter(), () -> {});
     	shooterIntakeJoystick.addButton(5, () -> shooterIntake.lowerShooter(), () -> {});
+    	drivingJoystick.addButton(1, () -> driveTrain.toggleGearShifting(), () -> {});
     }
 
     /**
