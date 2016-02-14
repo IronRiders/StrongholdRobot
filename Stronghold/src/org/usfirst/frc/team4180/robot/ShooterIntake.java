@@ -58,13 +58,16 @@ public class ShooterIntake {
 	//SET UP: ball is held against shooting wheels and shooter is up (and intake is raised up by drive)
 	public void shoot() {
 		setShooterTalon(-1); //pushes ball into intake by reversing shooter wheels
-		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1; System.out.println("Time = " + Robot.TIMER.get()))
+		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1;)
+			System.out.println("Time = " + Robot.TIMER.get());
 		//-1 is a place holder value, we need to test for time
 		setShooterTalon(shooterSpeed); //get shooter wheels up to speed
-		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1; System.out.println("Time = " + Robot.TIMER.get()))
+		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1;)
+			System.out.println("Time = " + Robot.TIMER.get());
 		//-1 is a place holder value, we need to test for time
 		setRollerTalon(1); //intake motors reversed (aka their normal direction???) to push ball back into shooter wheels
-		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1; System.out.println("Time = " + Robot.TIMER.get()))
+		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1;)
+			System.out.println("Time = " + Robot.TIMER.get());
 		//-1 is a place holder value, we need to test for time
 		stopShoot();
 		stopIntake();
