@@ -23,6 +23,8 @@ public class Robot extends IterativeRobot {
 	private static final int DRIVETRAIN_VIC_PORT_LEFT = -1; 
 	private static final int DRIVETRAIN_VIC_PORT_RIGHT = -1; 
 	private static final int DRIVING_JOYSTICK_PORT = -1; 
+	private static final int GEAR_SHIFTING_PORT_1 = -1;
+	private static final int GEAR_SHIFTING_PORT_2 = -1;
 	private static final int SHOOTERINTAKE_JOYSTICK_PORT = -1; 
 	
 	public static final Timer TIMER = new Timer();
@@ -46,8 +48,9 @@ public class Robot extends IterativeRobot {
     	//j.addButton(BUTTON_NUMBER, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0)); 
 		
 		shooterIntake = new ShooterIntake(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT,
-										   INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
-    	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT);
+				INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
+    	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT, 
+    			GEAR_SHIFTING_PORT_1, GEAR_SHIFTING_PORT_2);
     	 	
     	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
     	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {
