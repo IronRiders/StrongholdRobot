@@ -1,7 +1,5 @@
 package org.usfirst.frc.team4180.robot;
 
-import java.util.function.Consumer;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
