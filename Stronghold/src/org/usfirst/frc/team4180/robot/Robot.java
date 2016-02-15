@@ -65,7 +65,18 @@ public class Robot extends IterativeRobot {
     	drivingJoystick.addButton(1, () -> driveTrain.toggleGearShifting(), () -> {});
     }
 
-    /**
+	/**
+     * This function is called initially during autonomous
+     */    
+    public void autonomousInit() {
+    	//this auto code will have the robot drive beneath the low bar:
+    	shooterIntake.lowerShooter();
+    	driveTrain.updateSpeed(new double[] {0, 1, 0});
+    	TIMER.delay(10); //number of seconds to drive forward for to be tested
+    	shooterIntake.raiseShooter();
+    }
+    
+	/**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
