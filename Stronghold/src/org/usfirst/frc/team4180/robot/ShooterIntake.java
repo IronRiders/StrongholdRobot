@@ -2,6 +2,7 @@ package org.usfirst.frc.team4180.robot;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.Timer;
 
 public class ShooterIntake {
 //  Notes from Hardware/Design for shooter:	
@@ -20,15 +21,20 @@ public class ShooterIntake {
 	private TalonSRX intakeAngle;
 	private TalonSRX intakeRoller;
 	
-	public double shooterSpeed = 0;
+	public boolean shooting = false;
+	private Timer  shootTimer = new Timer();
+	double shooterSpeed = 0;
+	
+	private static final double wait1 = 0, wait2 = 0, wait3 = 0; 
 	
 	public ShooterIntake(int talonPort, int solenoidPort, int rollerTalonPort, int angleTalonPort) {
 		shooterTalon = new TalonSRX(talonPort);
 		elevationSolenoid = new Solenoid(solenoidPort);
 		intakeAngle = new TalonSRX(angleTalonPort);
 		intakeRoller = new TalonSRX(rollerTalonPort);
+		shootTimer.start();
 	}
-	
+	 
 	public void setShooterTalon(double shooterTalonSpeed){
 		shooterTalon.set(shooterTalonSpeed);
 	}
@@ -57,24 +63,25 @@ public class ShooterIntake {
 	
 	//SET UP: ball is held against shooting wheels and shooter is up (and intake is raised up by drive)
 	public void shoot() {
+		shooting = true;
+		shootTimer.reset();
+	}
+	
+	public void shooterTic() {
 		setShooterTalon(-1); //pushes ball into intake by reversing shooter wheels
-		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1;)
-			System.out.println("Time = " + Robot.TIMER.get());
-		//-1 is a place holder value, we need to test for time
-		setShooterTalon(shooterSpeed); //get shooter wheels up to speed
-		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1;)
-			System.out.println("Time = " + Robot.TIMER.get());
-		//-1 is a place holder value, we need to test for time
-		setRollerTalon(1); //intake motors reversed (aka their normal direction???) to push ball back into shooter wheels
-		for (double initTime = Robot.TIMER.get(); Robot.TIMER.get() - initTime < -1;)
-			System.out.println("Time = " + Robot.TIMER.get());
-		//-1 is a place holder value, we need to test for time
-		stopShoot();
-		stopIntake();
+		if(shootTimer.get() > wait1 - 5 && shootTimer.get() < wait1 + 5)
+			setShooterTalon(shooterSpeed); //get shooter wheels up to speed
+		if(shootTimer.get() > wait2 - 5 && shootTimer.get() < wait2 + 5)
+			setRollerTalon(1); //intake motors reversed (aka their normal direction???) to push ball back into shooter wheels
+		if(shootTimer.get() > wait3 - 5 && shootTimer.get() < wait3 + 5) {
+			stopShoot();
+			stopIntake();
+			shooting = false;
+		}
 		//test for what speeds will be best for intaking and shooting
 	}
 	
-	public void stopShoot(){
+	public void stopShoot() {
 		setShooterTalon(0); 
 	}
 	
