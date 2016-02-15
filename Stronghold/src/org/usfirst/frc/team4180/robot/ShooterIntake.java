@@ -68,7 +68,8 @@ public class ShooterIntake {
 	}
 	
 	public void shooterTic() {
-		setShooterTalon(-1); //pushes ball into intake by reversing shooter wheels
+		if(shootTimer.get() < 5)
+			setShooterTalon(-1); //pushes ball into intake by reversing shooter wheels
 		if(shootTimer.get() > wait1 - 5 && shootTimer.get() < wait1 + 5)
 			setShooterTalon(shooterSpeed); //get shooter wheels up to speed
 		if(shootTimer.get() > wait2 - 5 && shootTimer.get() < wait2 + 5)
