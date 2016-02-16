@@ -40,9 +40,8 @@ public class ImageRecognizer {
 		return ref[largestAreaPos];
 	}
 	
-	public double[] alignShooting() {
+	public double[] alignShootingX() {
 		Reflector closestRef = findLargest(reflectors);
-		
 		if(closestRef.getXPos() < 155) {
 			//turn right
 			return new double[]{1, 0, 0};
@@ -52,6 +51,19 @@ public class ImageRecognizer {
 			return new double[]{-1, 0, 0};
 		}
 		//stay still
+		return new double[]{0, 0, 0};
+	}
+	//we want to call this after alignShootingX has finished aligning
+	public double[] alignShootingDis() {
+		Reflector closestRef = findLargest(reflectors);
+		if(closestRef.getYPos() < 0) {
+			//move forward
+			return new double[]{0, 1, 0};
+		}
+		else if(closestRef.getYPos() > 0) {
+			//move backward
+			return new double[]{0, -1, 0};
+		}
 		return new double[]{0, 0, 0};
 	}
 	
@@ -73,6 +85,10 @@ public class ImageRecognizer {
 		 
 		 public double getXPos() {
 			 return x;
+		 }
+		 
+		 public double getYPos() {
+			 return y;
 		 }
 	 }	
 }
