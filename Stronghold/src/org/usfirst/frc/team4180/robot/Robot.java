@@ -59,11 +59,12 @@ public class Robot extends IterativeRobot {
     		shooterIntake.shooterSpeed = joystickInfo[2];
     	});
     	
-    	shooterIntakeJoystick.addButton(1, () -> shooterIntake.setShooterVic(1), () -> {});
-    	shooterIntakeJoystick.addButton(2, () -> shooterIntake.setShooterVic(0.75), () -> {});
-    	shooterIntakeJoystick.addButton(3, () -> shooterIntake.setShooterVic(0.5), () -> {});
-    	shooterIntakeJoystick.addButton(4, () -> shooterIntake.setShooterVic(0.25), () -> {});
-    	shooterIntakeJoystick.addButton(5, () -> shooterIntake.setShooterVic(0), () -> {});
+    	shooterIntakeJoystick.addButton(1, () -> shooterIntake.setShooterSolenoid(true), () -> {});
+    	shooterIntakeJoystick.addButton(2, () -> shooterIntake.setShooterSolenoid(false), () -> {});
+   // 	shooterIntakeJoystick.addButton(2, () -> shooterIntake.setShooterVic(0.1), () -> {});
+    //	shooterIntakeJoystick.addButton(3, () -> shooterIntake.setShooterVic(0.5), () -> {});
+    	//shooterIntakeJoystick.addButton(4, () -> shooterIntake.setShooterVic(0.25), () -> {});
+   // 	shooterIntakeJoystick.addButton(5, () -> shooterIntake.setShooterVic(0), () -> {});
     //	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intakeOn(), () -> shooterIntake.stopIntake());
     //	shooterIntakeJoystick.addButton(3, () -> shooterIntake.reverseIntake(), () -> shooterIntake.stopIntake());
    // 	shooterIntakeJoystick.addButton(4, () -> shooterIntake.raiseShooter(), () -> {});
