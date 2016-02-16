@@ -24,11 +24,16 @@ public class DriveTrain {
 
 	// update speed
 	public void updateSpeed(double[] JstickInfo) {
-		double x = JstickInfo[0];
-		double y = JstickInfo[1];
-		double z = JstickInfo[2];
+		double x = buffer(JstickInfo[0]);
+		double y = buffer(JstickInfo[1]);
+		double z = buffer(JstickInfo[2]);
+		
 	    leftVic.set(Math.min((Math.max(-1, y - x)), 1));
-		rightVic.set(Math.min((Math.max(-1, y + x)), 1));
+		rightVic.set(Math.min(-(Math.max(-1, y + x)), 1));
+	}
+	public static double buffer(double d){
+		if(d>0.05||d<-0.05) return d;
+		return 0;
 	}
 	 
 	public void toggleGearShifting() {
