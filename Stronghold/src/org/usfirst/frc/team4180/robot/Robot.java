@@ -36,6 +36,7 @@ public class Robot extends IterativeRobot {
 	private DriveTrain driveTrain;
 	private LambdaJoystick drivingJoystick;
 	private LambdaJoystick shooterIntakeJoystick;
+	private ImageRecognizer IR;
 	
     /**
      * This function is run when the robot is first started up and should be
@@ -43,7 +44,7 @@ public class Robot extends IterativeRobot {
      */
 	public void robotInit() {
 		TIMER.start();
-		
+		IR = new ImageRecognizer();
 	    //how to use the new joystick:
     	//intitalization:	
     	//j = new Joystick(PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
@@ -88,7 +89,12 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-    	
+    	IR.tick();
+    	double[] driveInfo = IR.alignShooting();
+    	if(driveInfo.equals(new double[]{0, 0, 0})) {
+    		shooterIntake.shoot();
+    	}
+    	driveTrain.updateSpeed(driveInfo);
     }
 
     /**
