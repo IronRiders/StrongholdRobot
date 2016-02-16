@@ -7,17 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 
 public class ShooterIntake {
-//  Notes from Hardware/Design for shooter:	
-//	there will be one pneumatic piston which moves in and out (single solenoid)
-//	there will be one motor (Vic SRX) which will turn in both directions
-//	motor will need to be controlled by a button
-//	Information we have from Design/Hardware about Intake:
-//	One motor (Vic SRX) which turns in both directions for rollers
-//	One motor (Or maybe pneumatics) which turns in both directions for angle
 
-//  NOTE: Orientations of motors and pneumatics should be correct according to design and hardware
-//  NOTE: We should test for which speed works best for the different tasks
-	
 	private VictorSP shooterVic;
 	private VictorSP shooterVic2;
 	private Solenoid elevationSolenoid;
