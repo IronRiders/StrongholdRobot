@@ -59,23 +59,25 @@ public class ShooterIntake {
 	
 	public void shoot() {
 		shooting = true;
-		shootTimer.reset();
-		shootTimer.start();
+		tick=0;
 	}
-	
+	int tick =0;
 	public void shooterTic() {
-		double wait1 = 100;
-		double wait2 = 200;
-		if(shootTimer.get() < 5)
+		if(shooting){
+		tick++;
+		if(tick==2)
 			setShooterVic(0.5);
 		
-		if(shootTimer.get() > wait1 - 5 && shootTimer.get() < wait1 + 5)
+		if(tick == 100)
+		{		
 			setShooterSolenoid(true);
-	 
-		if(shootTimer.get() > wait2){
-			setShooterVic(0);
+		}
+		if(tick>200){
+			setShooterVic(0);	
 			setShooterSolenoid(false);
+			tick=0;
 			shooting = false;
-		}	
+		}
+		}
 	}
 }

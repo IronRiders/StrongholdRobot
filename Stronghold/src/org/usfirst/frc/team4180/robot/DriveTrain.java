@@ -21,8 +21,6 @@ public class DriveTrain {
 		double y = buffer(JstickInfo[1]);
 		double z = buffer(JstickInfo[2]);
 		
-	   // leftVic.set(Math.min((Math.max(-1, y - x)), 1));
-		//rightVic.set(-Math.min((Math.max(-1, y + x)), 1));
 		leftVic.set(y - x);
 		rightVic.set(-y - x);
 	}
