@@ -52,11 +52,12 @@ public class ImageRecognizer {
 			//turn left
 			turnSpeed = -1;
 		}
-		if(closestRef.getYPos() < 0) {
+		if(closestRef.getYPos() < -1) {
 			//move forward
 			moveSpeed = 1;
 		}
-		else if(closestRef.getYPos() > 0) {
+		else if(closestRef.getYPos() > -1) {
+			//
 			//move backward
 			moveSpeed = -1;
 		}

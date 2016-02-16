@@ -88,7 +88,11 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
+    	IR.tick();
     	double[] driveInfo = IR.alignShooting();
+    	if(driveInfo.equals(new double[]{0, 0, 0})) {
+    		shooterIntake.shoot();
+    	}
     	driveTrain.updateSpeed(driveInfo);
     }
 
