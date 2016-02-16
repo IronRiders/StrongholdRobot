@@ -26,9 +26,8 @@ public class ShooterIntake {
 	
 	public boolean shooting = false;
 	private Timer  shootTimer = new Timer();
-	double shooterSpeed = 0;
 	
-	private static final double wait1 = 0, wait2 = 0, wait3 = 0; 
+	private static final double wait1 = 0, wait2 = 0; 
 	
 	public ShooterIntake(int VicPort,int VicPort2, int solenoidPort, int rollerVicPort, int angleVicPort) {
 		shooterVic = new VictorSP(VicPort);
@@ -37,7 +36,6 @@ public class ShooterIntake {
 		intakeAngle = new VictorSP(angleVicPort);
 		intakeRoller = new VictorSP(rollerVicPort);
 
-		shootTimer.start();
 	}
 
 	
@@ -59,58 +57,25 @@ public class ShooterIntake {
 		intakeAngle.set(angleVicSpeed);
 	}
 	
-	
-	//Shooter methods
-	public void lowerShooter() {
-		setShooterSolenoid(false);
-	}
-	
-	public void raiseShooter() {
-		setShooterSolenoid(true);
-	}
-	
-	//SET UP: ball is held against shooting wheels and shooter is up (and intake is raised up by drive)
 	public void shoot() {
 		shooting = true;
 		shootTimer.reset();
+		shootTimer.start();
 	}
 	
 	public void shooterTic() {
+		double wait1 = 100;
+		double wait2 = 200;
 		if(shootTimer.get() < 5)
-			setShooterVic(-1); //pushes ball into intake by reversing shooter wheels
+			setShooterVic(0.5);
+		
 		if(shootTimer.get() > wait1 - 5 && shootTimer.get() < wait1 + 5)
-			setShooterVic(shooterSpeed); //get shooter wheels up to speed
-		if(shootTimer.get() > wait2 - 5 && shootTimer.get() < wait2 + 5)
-			setRollerVic(1); //intake motors reversed (aka their normal direction???) to push ball back into shooter wheels
-		if(shootTimer.get() > wait3 - 5 && shootTimer.get() < wait3 + 5) {
-			stopShoot();
-			stopIntake();
+			setShooterSolenoid(true);
+	 
+		if(shootTimer.get() > wait2){
+			setShooterVic(0);
+			setShooterSolenoid(false);
 			shooting = false;
-		}
-		//test for what speeds will be best for intaking and shooting
-	}
-	
-	public void stopShoot(){
-		setShooterVic(0); 	
-	}
-	
-	//Intake methods
-	//Driver gets to control raising and lowering intake
-	public void setIntakeArmSpeed(double intakeArmSpeed) {
-		setAngleVic(intakeArmSpeed);
-	}
-
-	public void intakeOn(){
-		setRollerVic(1);
-		//test for which speed would be best for intaking  
-	}
-	
-	public void reverseIntake(){
-		setRollerVic(-1);
-		//test for which speed would be best for reverseIntaking
-	}	
-	
-	public void stopIntake(){
-		setRollerVic(0);
+		}	
 	}
 }
