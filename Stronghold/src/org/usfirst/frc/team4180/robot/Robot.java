@@ -14,17 +14,21 @@ import edu.wpi.first.wpilibj.Timer;
 public class Robot extends IterativeRobot {
 
 	//place holder values
-	private static final int SHOOTER_TALON_PORT = 6; //6
-	private static final int SHOOTER_SOLENOID_PORT = 7; //7
-	private static final int INTAKE_TALON_PORT_1 = 8; //8
-	private static final int INTAKE_TALON_PORT_2 = 9; //9
-	private static final int DRIVETRAIN_VIC_PORT_LEFT = 0; //0
-	private static final int DRIVETRAIN_VIC_PORT_RIGHT = 1; //1 
-	private static final int GEAR_SHIFTING_PORT_1 = 2; //?
-	private static final int GEAR_SHIFTING_PORT_2 = 3; //?
+	private static final int SHOOTER_VIC_PORT = 6;
+	private static final int SHOOTER_VIC_PORT_2 = 7; 
+	private static final int INTAKE_VIC_PORT_1 = 8; 
+	private static final int INTAKE_VIC_PORT_2 = 9; 
+	private static final int DRIVETRAIN_VIC_PORT_LEFT = 0; 
+	private static final int DRIVETRAIN_VIC_PORT_RIGHT = 1; 
+	
+	private static final int SHOOTER_SOLENOID_PORT = 7;
+	private static final int GEAR_SHIFTING_PORT_1 = 0;
+	private static final int GEAR_SHIFTING_PORT_2 = 1;
+	
+	private static final int USRS_PORT = 0;
 
-	private static final int DRIVING_JOYSTICK_PORT = 0;
-	private static final int SHOOTERINTAKE_JOYSTICK_PORT = 1; 
+	private static final int DRIVING_JOYSTICK_PORT = 1;
+	private static final int SHOOTERINTAKE_JOYSTICK_PORT = 0; 
 	
 	public static final Timer TIMER = new Timer();
 	
@@ -47,10 +51,8 @@ public class Robot extends IterativeRobot {
 		//Adding a Button
     	//j.addButton(BUTTON_NUMBER, ()-> driveTrain.setJagspeed(0.1, 0.1), ()->driveTrain.setJagspeed(0, 0)); 
 		
-		shooterIntake = new ShooterIntake(SHOOTER_TALON_PORT, SHOOTER_SOLENOID_PORT,
-				INTAKE_TALON_PORT_1, INTAKE_TALON_PORT_2);
-    	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT, 
-    			GEAR_SHIFTING_PORT_1, GEAR_SHIFTING_PORT_2);
+		shooterIntake = new ShooterIntake(SHOOTER_VIC_PORT , SHOOTER_VIC_PORT_2, SHOOTER_SOLENOID_PORT,INTAKE_VIC_PORT_1, INTAKE_VIC_PORT_2);
+    	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT, GEAR_SHIFTING_PORT_1, GEAR_SHIFTING_PORT_2);
     	 	
     	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
     	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {
@@ -58,12 +60,16 @@ public class Robot extends IterativeRobot {
     		shooterIntake.shooterSpeed = joystickInfo[2];
     	});
     	
-    	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> shooterIntake.stopShoot());
-    	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intakeOn(), () -> shooterIntake.stopIntake());
-    	shooterIntakeJoystick.addButton(3, () -> shooterIntake.reverseIntake(), () -> shooterIntake.stopIntake());
-    	shooterIntakeJoystick.addButton(4, () -> shooterIntake.raiseShooter(), () -> {});
-    	shooterIntakeJoystick.addButton(5, () -> shooterIntake.lowerShooter(), () -> {});
-    	drivingJoystick.addButton(1, () -> driveTrain.toggleGearShifting(), () -> {});
+    	shooterIntakeJoystick.addButton(1, () -> shooterIntake.setShooterVic(1), () -> {});
+    	shooterIntakeJoystick.addButton(2, () -> shooterIntake.setShooterVic(0.75), () -> {});
+    	shooterIntakeJoystick.addButton(3, () -> shooterIntake.setShooterVic(0.5), () -> {});
+    	shooterIntakeJoystick.addButton(4, () -> shooterIntake.setShooterVic(0.25), () -> {});
+    	shooterIntakeJoystick.addButton(5, () -> shooterIntake.setShooterVic(0), () -> {});
+    //	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intakeOn(), () -> shooterIntake.stopIntake());
+    //	shooterIntakeJoystick.addButton(3, () -> shooterIntake.reverseIntake(), () -> shooterIntake.stopIntake());
+   // 	shooterIntakeJoystick.addButton(4, () -> shooterIntake.raiseShooter(), () -> {});
+    //	shooterIntakeJoystick.addButton(5, () -> shooterIntake.lowerShooter(), () -> {});
+    //	drivingJoystick.addButton(1, () -> driveTrain.toggleGearShifting(), () -> {});
     }
 
 	/**
@@ -72,8 +78,9 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	//this auto code will have the robot drive beneath the low bar:
     	shooterIntake.lowerShooter();
-    	driveTrain.updateSpeed(new double[] {0, 1, 0});
+    	driveTrain.updateSpeed(new double[] {0, 1, 0}); //set speed to 1
     	TIMER.delay(10); //number of seconds to drive forward for to be tested
+    	driveTrain.updateSpeed(new double[] {0, 0, 0}); //set speed to 0
     	shooterIntake.raiseShooter();
     }
     
@@ -89,6 +96,8 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+    	drivingJoystick.listen();
+    	shooterIntakeJoystick.listen();
     	if(shooterIntake.shooting) shooterIntake.shooterTic();
     }
     
@@ -99,3 +108,4 @@ public class Robot extends IterativeRobot {
     	
     }
 }
+
