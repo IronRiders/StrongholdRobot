@@ -4,13 +4,14 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class ImageRecognizer {
 	NetworkTable table;
-	Reflector[] reflectors;
-	
+	double moveSpeed = 0.5;
+	double turnSpeed = 0.5;
+
 	public ImageRecognizer(){
 	table = NetworkTable.getTable("GRIP/contours");
 	}
 	
-	public void tick(){
+	public Reflector[] getReflectors(){
 		double[] areas = table.getNumberArray("area", new double[0]);
 		double[] x = table.getNumberArray("centerX", new double[0]);
 		double[] y = table.getNumberArray("centerY", new double[0]);
@@ -18,11 +19,13 @@ public class ImageRecognizer {
 		double[] h = table.getNumberArray("height", new double[0]);
 		double[] w = table.getNumberArray("width", new double[0]);
 		
-		reflectors = new Reflector[areas.length];
+		Reflector[] reflectors = new Reflector[areas.length];
 		
 		for(int i = 0; i < areas.length; i++){
 			reflectors[i] = new Reflector(areas[i], x[i], y[i], w[i], h[i], solid[i]);
 		}
+		
+		return reflectors;
 	}
 	
 	public Reflector findLargest(Reflector[] ref) {
@@ -30,7 +33,7 @@ public class ImageRecognizer {
 		int largestAreaPos = 0;
 		
 		for(int i = 0; i < ref.length; i++) {
-			double newArea = ref[i].getArea();
+			double newArea = ref[i].area;
 			
 			if(newArea > largestArea) {
 				newArea = largestArea;
@@ -41,25 +44,25 @@ public class ImageRecognizer {
 	}
 	
 	public double[] alignShooting() {
-		Reflector closestRef = findLargest(reflectors);
+		Reflector closestRef = findLargest(getReflectors());
 		double turnSpeed = 0;
 		double moveSpeed = 0;
-		if(closestRef.getXPos() < 155) {
+		if(closestRef.x < 155) {
 			//turn right
-			turnSpeed = 1;
+			turnSpeed = this.turnSpeed;;
 		} 
-		else if(closestRef.getXPos() > 165) {
+		else if(closestRef.x > 165) {
 			//turn left
-			turnSpeed = -1;
+			turnSpeed = -this.turnSpeed;
 		}
-		if(closestRef.getYPos() < -1) {
+		if(closestRef.y < -1) {
 			//move forward
-			moveSpeed = 1;
+			moveSpeed = this.moveSpeed;
 		}
-		else if(closestRef.getYPos() > -1) {
+		else if(closestRef.y > -1) {
 			//
 			//move backward
-			moveSpeed = -1;
+			moveSpeed = -this.moveSpeed;
 		}
 		//stay still
 		return new double[]{turnSpeed, moveSpeed, 0};
@@ -77,16 +80,5 @@ public class ImageRecognizer {
 			 this.solid = solid;
 		 }
 		 
-		 public double getArea() {
-			 return area;
-		 }
-		 
-		 public double getXPos() {
-			 return x;
-		 }
-		 
-		 public double getYPos() {
-			 return y;
-		 }
 	 }	
 }

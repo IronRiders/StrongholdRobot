@@ -14,20 +14,27 @@ public class ShooterIntake {
 	private VictorSP intakeAngle;
 	private VictorSP intakeRoller;
 	
+	private final double driverTrust = 0.1;
+	private double armAngle = 0.0;
+	
 	public boolean shooting = false;
-	private Timer  shootTimer = new Timer();
-	
-	private static final double wait1 = 0, wait2 = 0; 
-	
+
 	public ShooterIntake(int VicPort,int VicPort2, int solenoidPort, int rollerVicPort, int angleVicPort) {
 		shooterVic = new VictorSP(VicPort);
 		shooterVic2 = new VictorSP(VicPort2);
 		elevationSolenoid = new Solenoid(solenoidPort);
 		intakeAngle = new VictorSP(angleVicPort);
 		intakeRoller = new VictorSP(rollerVicPort);
-
 	}
 
+	public void moveArm(double y) {
+		if(armAngle > 0.0 && armAngle < 5.0) {
+			setAngleVic(driverTrust * y);
+			
+			armAngle += y * driverTrust;
+		}
+
+	}
 	
 	public void setShooterVic(double shooterVicSpeed){
 		shooterVic.set(shooterVicSpeed);

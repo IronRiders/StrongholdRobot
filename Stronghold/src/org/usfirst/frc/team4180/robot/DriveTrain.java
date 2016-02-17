@@ -13,24 +13,23 @@ public class DriveTrain {
 		leftVic = new VictorSP(leftPort);
 		rightVic = new VictorSP(rightPort);
 		gearShifting = new DoubleSolenoid(gearShiftPort1, gearShiftPort2);
-		state = false;
 	}
 
 	public void updateSpeed(double[] JstickInfo) {
-		double x = buffer(JstickInfo[0]);
-		double y = buffer(JstickInfo[1]);
-		double z = buffer(JstickInfo[2]);
-		
-		leftVic.set(y - x);
-		rightVic.set(-y - x);
+		double x = JstickInfo[0];
+		double y = JstickInfo[1];
+		double z = JstickInfo[2];
+		double left = y - x;
+		double right = -y - x;
+		shift = Math.abs(left) < 0.5 && Math.abs(right) < 0.5;	
+		leftVic.set(left);
+		rightVic.set(right);
 	}
-	public static double buffer(double d){
-		if(d>0.05||d<-0.05) return d;
-		return 0;
-	}
-	
-	private boolean state; 
+
+	private boolean shift = false;
+	private boolean state = false; 
 	public void toggleGearShifting() {
+		if(shift)
 		state = !state;
 		gearShifting.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
 	}

@@ -14,6 +14,11 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		this.joystickListener = joystickListener;
 	}
 	
+	public static double buffer(double d){
+		if(d>0.05||d<-0.05) return d;
+		return 0;
+	}
+	
 	public void addButton(int buttonNum, Runnable onKeyDown, Runnable onKeyUp){
 		buttons[buttonNum-1] = new Button(onKeyDown, onKeyUp);
 	}
@@ -27,7 +32,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		}
 		
 		//Do whatever we've told the joystick it should
-		joystickListener.accept(new double[]{this.getX(), this.getY(), this.getZ()});
+		joystickListener.accept(new double[]{buffer(this.getX()), buffer(this.getY()), buffer(this.getZ())});
 	}
 	
 	public class Button {

@@ -41,7 +41,9 @@ public class Robot extends IterativeRobot {
     	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, (joystickInfo) -> driveTrain.updateSpeed(joystickInfo));
     	drivingJoystick.addButton(1, () -> driveTrain.toggleGearShifting(), () -> {});
     	
-    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {});	
+    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {
+    		shooterIntake.moveArm(joystickInfo[1]);
+    	});	
     	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> {});
     	shooterIntakeJoystick.addButton(2, () -> shooterIntake.setRollerVic(1), () -> shooterIntake.setRollerVic(0));
     	shooterIntakeJoystick.addButton(3, () -> shooterIntake.setRollerVic(-1), () -> shooterIntake.setRollerVic(0));
@@ -55,7 +57,6 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousPeriodic() {
-    	IR.tick();
     	double[] driveInfo = IR.alignShooting();
     	if(driveInfo.equals(new double[]{0, 0, 0})) {
     		shooterIntake.shoot();
