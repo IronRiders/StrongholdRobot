@@ -5,9 +5,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.Timer;
 
-
 public class ShooterIntake {
-
 	private VictorSP shooterVic;
 	private VictorSP shooterVic2;
 	private Solenoid elevationSolenoid;
@@ -18,8 +16,9 @@ public class ShooterIntake {
 	private double armAngle = 0.0;
 	
 	public boolean shooting = false;
+	private int tick = 0;
 
-	public ShooterIntake(int VicPort,int VicPort2, int solenoidPort, int rollerVicPort, int angleVicPort) {
+	public ShooterIntake(int VicPort, int VicPort2, int solenoidPort, int rollerVicPort, int angleVicPort) {
 		shooterVic = new VictorSP(VicPort);
 		shooterVic2 = new VictorSP(VicPort2);
 		elevationSolenoid = new Solenoid(solenoidPort);
@@ -30,16 +29,13 @@ public class ShooterIntake {
 	public void moveArm(double y) {
 		if(armAngle > 0.0 && armAngle < 5.0) {
 			setAngleVic(driverTrust * y);
-			
 			armAngle += y * driverTrust;
 		}
-
 	}
 	
-	public void setShooterVic(double shooterVicSpeed){
+	public void setShooterVic(double shooterVicSpeed) {
 		shooterVic.set(shooterVicSpeed);
 		shooterVic2.set(shooterVicSpeed);
-
 	}
 	
 	public void setShooterSolenoid(boolean state) {
@@ -56,25 +52,20 @@ public class ShooterIntake {
 	
 	public void shoot() {
 		shooting = true;
-		tick=0;
+		tick = 0;
 	}
-	int tick =0;
+	
 	public void shooterTic() {
 		if(shooting){
-		tick++;
-		if(tick==2)
-			setShooterVic(0.5);
-		
-		if(tick == 100)
-		{		
-			setShooterSolenoid(true);
-		}
-		if(tick>200){
-			setShooterVic(0);	
-			setShooterSolenoid(false);
-			tick=0;
-			shooting = false;
-		}
+			tick++;
+			if(tick == 2) setShooterVic(0.5);
+			if(tick == 100) setShooterSolenoid(true);
+			if(tick > 200) {
+				setShooterVic(0);	
+				setShooterSolenoid(false);
+				tick = 0;
+				shooting = false;
+			}
 		}
 	}
 }

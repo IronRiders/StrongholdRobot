@@ -9,6 +9,9 @@ public class DriveTrain {
 	private VictorSP rightVic;
 	private DoubleSolenoid gearShifting;
 	
+	private boolean shift = false;
+	private boolean state = false;
+	
 	public DriveTrain(int leftPort, int rightPort, int gearShiftPort1, int gearShiftPort2) {
 		leftVic = new VictorSP(leftPort);
 		rightVic = new VictorSP(rightPort);
@@ -25,12 +28,9 @@ public class DriveTrain {
 		leftVic.set(left);
 		rightVic.set(right);
 	}
-
-	private boolean shift = false;
-	private boolean state = false; 
+	
 	public void toggleGearShifting() {
-		if(shift)
-		state = !state;
+		if(shift) state = !state;
 		gearShifting.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
 	}
 }

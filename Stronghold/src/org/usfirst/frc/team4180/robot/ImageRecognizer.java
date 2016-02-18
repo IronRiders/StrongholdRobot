@@ -3,15 +3,15 @@ package org.usfirst.frc.team4180.robot;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class ImageRecognizer {
-	NetworkTable table;
+	private NetworkTable table;
 	double moveSpeed = 0.5;
 	double turnSpeed = 0.5;
 
-	public ImageRecognizer(){
-	table = NetworkTable.getTable("GRIP/contours");
+	public ImageRecognizer() {
+		table = NetworkTable.getTable("GRIP/contours");
 	}
 	
-	public Reflector[] getReflectors(){
+	public Reflector[] getReflectors() {
 		double[] areas = table.getNumberArray("area", new double[0]);
 		double[] x = table.getNumberArray("centerX", new double[0]);
 		double[] y = table.getNumberArray("centerY", new double[0]);
@@ -21,7 +21,7 @@ public class ImageRecognizer {
 		
 		Reflector[] reflectors = new Reflector[areas.length];
 		
-		for(int i = 0; i < areas.length; i++){
+		for(int i = 0; i < areas.length; i++) {
 			reflectors[i] = new Reflector(areas[i], x[i], y[i], w[i], h[i], solid[i]);
 		}
 		
@@ -30,23 +30,23 @@ public class ImageRecognizer {
 	
 	public Reflector findLargest(Reflector[] ref) {
 		double largestArea = 0;
-		int largestAreaPos = 0;
+		int indexOfLargestArea = 0;
 		
 		for(int i = 0; i < ref.length; i++) {
 			double newArea = ref[i].area;
-			
 			if(newArea > largestArea) {
 				newArea = largestArea;
-				largestAreaPos = i;
+				indexOfLargestArea = i;
 			}
 		}
-		return ref[largestAreaPos];
+		return ref[indexOfLargestArea];
 	}
 	
 	public double[] alignShooting() {
 		Reflector closestRef = findLargest(getReflectors());
 		double turnSpeed = 0;
 		double moveSpeed = 0;
+		
 		if(closestRef.x < 155) {
 			//turn right
 			turnSpeed = this.turnSpeed;;
@@ -55,6 +55,7 @@ public class ImageRecognizer {
 			//turn left
 			turnSpeed = -this.turnSpeed;
 		}
+		
 		if(closestRef.y < -1) {
 			//move forward
 			moveSpeed = this.moveSpeed;
@@ -68,7 +69,7 @@ public class ImageRecognizer {
 		return new double[]{turnSpeed, moveSpeed, 0};
 	}
 
-	 public class Reflector{
+	 public static class Reflector{
 		 private double area, x , y , w , h , solid;
 	
 		 public Reflector(double area, double x, double y, double w, double h, double solid){
@@ -79,6 +80,5 @@ public class ImageRecognizer {
 			 this.h = h;
 			 this.solid = solid;
 		 }
-		 
 	 }	
 }
