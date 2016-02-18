@@ -4,22 +4,19 @@ package org.usfirst.frc.team4180.robot;
 import java.util.function.Consumer;
 
 public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
-
 	public Button[] buttons = new Button[11];
-	//This checks if the joystick is being used for movement or something else
-	Consumer<double[]> joystickListener;
+	private Consumer<double[]> joystickListener;
 	
 	public LambdaJoystick(int port, Consumer<double[]> joystickListener) {
 		super(port); 	
 		this.joystickListener = joystickListener;
 	}
 	
-	public static double buffer(double d){
-		if(d>0.05||d<-0.05) return d;
-		return 0;
+	public static double buffer(double d) {
+		return (d > 0.05 || d < -0.05) ? d : 0;
 	}
 	
-	public void addButton(int buttonNum, Runnable onKeyDown, Runnable onKeyUp){
+	public void addButton(int buttonNum, Runnable onKeyDown, Runnable onKeyUp) {
 		buttons[buttonNum-1] = new Button(onKeyDown, onKeyUp);
 	}
 	
@@ -35,7 +32,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		joystickListener.accept(new double[]{buffer(this.getX()), buffer(this.getY()), buffer(this.getZ())});
 	}
 	
-	public class Button {
+	public static class Button {
 		public boolean currentState = false;
 		public Runnable onKeyDown;
 		public Runnable onKeyUp;
@@ -50,12 +47,8 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 			//If it's now up, run onKeyUp
 			if(currentState != newState) {
 				currentState = newState;
-				if(newState) {
-					onKeyDown.run();
-				}
-				else {
-					onKeyUp.run();
-				}
+				if(newState) onKeyDown.run();
+				else onKeyUp.run();
 			}
 		}
 	}
