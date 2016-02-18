@@ -41,8 +41,8 @@ public class Robot extends IterativeRobot {
     	
     	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> shooterIntake.moveArm(joystickInfo[1]));
     	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> {});
-    	shooterIntakeJoystick.addButton(2, () -> shooterIntake.setRollerVic(1), () -> shooterIntake.setRollerVic(0));
-    	shooterIntakeJoystick.addButton(3, () -> shooterIntake.setRollerVic(-1), () -> shooterIntake.setRollerVic(0));
+    	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intake(false), () -> shooterIntake.intake(true));
+    	//shooterIntakeJoystick.addButton(3, () -> shooterIntake.setRollerVic(-1), () -> shooterIntake.setRollerVic(0));
     }
  
     public void autonomousInit() {

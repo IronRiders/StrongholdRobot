@@ -31,7 +31,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		joystickListener.accept(new double[]{buffer(this.getX()), buffer(this.getY()), buffer(this.getZ())});
 	}
 	
-	public static class Button {
+	public class Button {
 		public boolean currentState = false;
 		public Runnable onKeyDown;
 		public Runnable onKeyUp;

@@ -28,18 +28,15 @@ public class ImageRecognizer {
 		return reflectors;
 	}
 	
-	public Reflector findLargest(Reflector[] ref) {
-		double largestArea = 0;
-		int indexOfLargestArea = 0;
+	public Reflector findLargest(Reflector[] ref) { //assumes ref is not empty
+		int largest = 0;
 		
-		for(int i = 0; i < ref.length; i++) {
-			double newArea = ref[i].area;
-			if(newArea > largestArea) {
-				newArea = largestArea;
-				indexOfLargestArea = i;
-			}
+		for(int i = 1; i < ref.length; i++) {
+			if(ref[i].area > ref[largest].area)
+				largest = i;
 		}
-		return ref[indexOfLargestArea];
+		
+		return ref[largest];
 	}
 	
 	public double[] alignShooting() {
@@ -69,7 +66,7 @@ public class ImageRecognizer {
 		return new double[]{turnSpeed, moveSpeed, 0};
 	}
 
-	 public static class Reflector{
+	 public class Reflector {
 		 private double area, x , y , w , h , solid;
 	
 		 public Reflector(double area, double x, double y, double w, double h, double solid){

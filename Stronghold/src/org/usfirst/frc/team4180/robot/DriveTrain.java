@@ -30,7 +30,9 @@ public class DriveTrain {
 	}
 	
 	public void toggleGearShifting() {
-		if(shift) state = !state;
-		gearShifting.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+		if(shift) {
+			state = !state;
+			gearShifting.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+		}
 	}
 }
