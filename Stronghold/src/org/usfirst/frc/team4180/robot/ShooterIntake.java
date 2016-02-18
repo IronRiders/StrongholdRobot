@@ -2,12 +2,9 @@ package org.usfirst.frc.team4180.robot;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.TalonSRX;
-import edu.wpi.first.wpilibj.Timer;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ShooterIntake {
-
 	private VictorSP shooterVic;
 	private VictorSP shooterVic2;
 	private Solenoid elevationSolenoid;
@@ -15,8 +12,10 @@ public class ShooterIntake {
 	private VictorSP intakeRoller;
 	
 	private final double driverTrust = 0.1;
-	private double armAngle = 0.0;
 	
+	private DigitalInput tooHigh = new DigitalInput(-1);
+	private DigitalInput tooLow  = new DigitalInput(-1);
+
 	public boolean shooting = false;
 
 	public ShooterIntake(int VicPort,int VicPort2, int solenoidPort, int rollerVicPort, int angleVicPort) {
@@ -26,14 +25,17 @@ public class ShooterIntake {
 		intakeAngle = new VictorSP(angleVicPort);
 		intakeRoller = new VictorSP(rollerVicPort);
 	}
+	
+	public void intake(boolean stop) {
+		intakeRoller.set(stop ? 0.0 : 0.5);
+		setShooterVic(stop ? 0.0 : 0.07);
+	}
+
 
 	public void moveArm(double y) {
-		if(armAngle > 0.0 && armAngle < 5.0) {
-			setAngleVic(driverTrust * y);
-			
-			armAngle += y * driverTrust;
+		if ((!tooHigh.get() && y < 0) || (!tooLow.get() && y > 0)) {
+			intakeAngle.set(driverTrust * y);
 		}
-
 	}
 	
 	public void setShooterVic(double shooterVicSpeed){
@@ -50,15 +52,11 @@ public class ShooterIntake {
 		intakeRoller.set(rollerVicSpeed);
 	}
 	
-	public void setAngleVic(double angleVicSpeed) {
-		intakeAngle.set(angleVicSpeed);
-	}
-	
 	public void shoot() {
 		shooting = true;
-		tick=0;
+		tick = 0;
 	}
-	int tick =0;
+	int tick = 0;
 	public void shooterTic() {
 		if(shooting){
 		tick++;
