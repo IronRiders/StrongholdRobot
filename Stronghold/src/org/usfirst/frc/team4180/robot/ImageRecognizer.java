@@ -8,7 +8,7 @@ public class ImageRecognizer {
 	double turnSpeed = 0.5;
 
 	public ImageRecognizer(){
-	table = NetworkTable.getTable("GRIP/contours");
+	table = NetworkTable.getTable("GRIP/myContoursReport");
 	}
 	
 	public Reflector[] getReflectors(){
@@ -28,19 +28,15 @@ public class ImageRecognizer {
 		return reflectors;
 	}
 	
-	public Reflector findLargest(Reflector[] ref) {
-		double largestArea = 0;
-		int largestAreaPos = 0;
+	public Reflector findLargest(Reflector[] ref) { //assumes ref is not empty
+		int largest = 0;
 		
-		for(int i = 0; i < ref.length; i++) {
-			double newArea = ref[i].area;
-			
-			if(newArea > largestArea) {
-				newArea = largestArea;
-				largestAreaPos = i;
-			}
+		for(int i = 1; i < ref.length; i++) {
+			if(ref[i].area > ref[largest].area)
+				largest = i;
 		}
-		return ref[largestAreaPos];
+		
+		return ref[largest];
 	}
 	
 	public double[] alignShooting() {

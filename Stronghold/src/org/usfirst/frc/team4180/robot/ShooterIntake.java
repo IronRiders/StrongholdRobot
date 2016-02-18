@@ -13,8 +13,8 @@ public class ShooterIntake {
 	
 	private final double driverTrust = 0.1;
 	
-	private DigitalInput tooHigh = new DigitalInput(-1);
-	private DigitalInput tooLow  = new DigitalInput(-1);
+//	private DigitalInput tooHigh = new DigitalInput(-1);
+//	private DigitalInput tooLow  = new DigitalInput(-1);
 
 	public boolean shooting = false;
 
@@ -33,9 +33,9 @@ public class ShooterIntake {
 
 
 	public void moveArm(double y) {
-		if ((!tooHigh.get() && y < 0) || (!tooLow.get() && y > 0)) {
-			intakeAngle.set(driverTrust * y);
-		}
+	//	if ((!tooHigh.get() && y < 0) || (!tooLow.get() && y > 0)) {
+//	/		intakeAngle.set(driverTrust * y);
+	//	}
 	}
 	
 	public void setShooterVic(double shooterVicSpeed){
@@ -63,15 +63,17 @@ public class ShooterIntake {
 		if(tick==2)
 			setShooterVic(0.5);
 		
-		if(tick == 100)
+		if(tick == 75)
 		{		
 			setShooterSolenoid(true);
 		}
-		if(tick>200){
-			setShooterVic(0);	
-			setShooterSolenoid(false);
-			tick=0;
+		if(tick > 100){
+			setShooterVic(0.5 - (tick - 100) * 0.005);	
+		}
+		if (tick > 200) {
+			tick = 0;
 			shooting = false;
+			setShooterSolenoid(false);
 		}
 		}
 	}
