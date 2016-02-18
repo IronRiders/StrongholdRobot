@@ -6,8 +6,10 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 	public Button[] buttons = new Button[11];
 	private Consumer<double[]> joystickListener;
 	
+	private static Instrumentation tracking;
+	
 	public LambdaJoystick(int port, Consumer<double[]> joystickListener) {
-		super(port); 	
+		super(port);
 		this.joystickListener = joystickListener;
 	}
 	
@@ -24,14 +26,17 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		for (int i = 0; i < buttons.length; i++) {
 			if (buttons[i] != null) {
 				buttons[i].listen(this.getRawButton(i + 1));
+				tracking.addData(new Instrumentation.ButtonPress(i));
 			}
 		}
 		
+		double[] joystickData = {buffer(this.getX()), buffer(this.getY()), buffer(this.getZ())};
 		//Do whatever we've told the joystick it should
-		joystickListener.accept(new double[]{buffer(this.getX()), buffer(this.getY()), buffer(this.getZ())});
+		joystickListener.accept(joystickData);
+		tracking.addData(joystickData);
 	}
 	
-	public class Button {
+	private class Button {
 		public boolean currentState = false;
 		public Runnable onKeyDown;
 		public Runnable onKeyUp;
