@@ -1,29 +1,33 @@
 package org.usfirst.frc.team4180.robot;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Instrumentation {
-	private Queue joystickData;
+	private Queue joystickDataOut;
+	private Queue joystickDataIn;
 	
 	public Instrumentation() {
-		joystickData = new LinkedList();
+		joystickDataOut = new LinkedList();
+		joystickDataIn  = new LinkedList();
 	}
 	
 	public void addData(Object data) {
-		joystickData.add(data);
+		joystickDataOut.add(data);
 	}
 	
 	public void dumpData() {
 		File dataStorage;
 		FileOutputStream stream; 
         try {
-            dataStorage = new File("..\\" +  LocalDateTime.now() + "_GhostDriver.robot");
+            dataStorage = new File("/tmp/" + LocalDateTime.now() + "_GhostDriver.robot");
             dataStorage.createNewFile();
             stream = new FileOutputStream(dataStorage);
         } catch(IOException e) {
@@ -34,7 +38,7 @@ public class Instrumentation {
         ObjectOutputStream writer;
         try {
             writer = new ObjectOutputStream(stream);
-            writer.writeObject(joystickData);
+            writer.writeObject(joystickDataOut);
             writer.close();
             stream.close();
         } catch(IOException e) {
@@ -43,7 +47,30 @@ public class Instrumentation {
         }
 	}
 	
-	static class ButtonPress {
+	public void load(String fileLocation) {
+		File dataStorage;
+		FileInputStream stream;
+        try {
+            dataStorage = new File(fileLocation);
+            stream = new FileInputStream(dataStorage);
+        } catch(IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        
+        ObjectInputStream reader;
+        try {
+            reader = new ObjectInputStream(stream);
+            joystickDataIn = (Queue)reader.readObject();
+            reader.close();
+            stream.close();
+        } catch(IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+	}
+	
+	public static class ButtonPress {
 		private int pressedButton;
 		private double timePressed;
 		private double timeReleased;

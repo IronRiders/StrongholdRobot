@@ -6,7 +6,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 	public Button[] buttons = new Button[11];
 	private Consumer<double[]> joystickListener;
 	
-	private static Instrumentation tracking;
+	public static final Instrumentation tracking = new Instrumentation();
 	
 	public LambdaJoystick(int port, Consumer<double[]> joystickListener) {
 		super(port);

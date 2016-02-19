@@ -4,8 +4,9 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 
-
 public class Robot extends IterativeRobot {
+	private static final boolean GHOST_DRIVER = true;
+	
 	private static final int SHOOTER_VIC_PORT = 6;
 	private static final int SHOOTER_VIC_PORT_2 = 7; 
 	private static final int INTAKE_VIC_PORT_1 = 8; 
@@ -28,6 +29,8 @@ public class Robot extends IterativeRobot {
 	private LambdaJoystick  shooterIntakeJoystick;
 	private ImageRecognizer imageRecognizer;
 	
+	private boolean writeInstrumentationFile = false;
+	
 	public void robotInit() {
 		TIMER.start();
 		
@@ -46,9 +49,13 @@ public class Robot extends IterativeRobot {
     }
  
     public void autonomousInit() {
-    	driveTrain.updateSpeed(new double[] {0, 1, 0}); 
-    	TIMER.delay(10); 
-    	driveTrain.updateSpeed(new double[] {0, 0, 0});
+		driveTrain.updateSpeed(new double[] {0, 1, 0});
+		TIMER.delay(10);
+		driveTrain.updateSpeed(new double[] {0, 0, 0});
+    }
+    
+    public void disabledInit() {
+    	writeInstrumentationFile = true;
     }
     
     public void autonomousPeriodic() {
@@ -63,10 +70,18 @@ public class Robot extends IterativeRobot {
     	drivingJoystick.listen();
     	shooterIntakeJoystick.listen();
     	shooterIntake.shooterTic();
+    	writeInstrumentationFile = true;
     }
     
     public void testPeriodic() {
     	
+    }
+    
+    public void disabledPeriodic() {
+    	if (writeInstrumentationFile) {
+    		LambdaJoystick.tracking.dumpData();
+    		writeInstrumentationFile = false;
+    	}
     }
 }
 
