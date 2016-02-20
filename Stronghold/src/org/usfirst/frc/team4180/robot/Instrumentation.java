@@ -25,7 +25,7 @@ public class Instrumentation {
 	
 	public void dumpData() {
 		File dataStorage;
-		FileOutputStream stream; 
+		FileOutputStream stream;
         try {
             dataStorage = new File("/tmp/" + LocalDateTime.now() + "_GhostDriver.robot");
             dataStorage.createNewFile();
