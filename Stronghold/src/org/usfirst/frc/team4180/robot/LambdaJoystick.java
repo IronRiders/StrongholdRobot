@@ -6,7 +6,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 	public Button[] buttons = new Button[11];
 	private Consumer<double[]> joystickListener;
 	
-	public static final Instrumentation tracking = new Instrumentation();
+	public static final Recording tracking = new Recording();
 	
 	public LambdaJoystick(int port, Consumer<double[]> joystickListener) {
 		super(port);
@@ -26,7 +26,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		for (int i = 0; i < buttons.length; i++) {
 			if (buttons[i] != null) {
 				buttons[i].listen(this.getRawButton(i + 1));
-				tracking.addData(new Instrumentation.ButtonPress(i));
+				tracking.addData(new Recording.ButtonPress(i));
 			}
 		}
 		
