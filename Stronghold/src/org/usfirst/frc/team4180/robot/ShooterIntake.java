@@ -2,7 +2,7 @@ package org.usfirst.frc.team4180.robot;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.DigitalInput;
 
 public class ShooterIntake {
 	private VictorSP shooterVic;
