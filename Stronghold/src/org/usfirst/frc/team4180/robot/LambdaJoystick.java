@@ -6,11 +6,12 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 	public Button[] buttons = new Button[11];
 	private Consumer<double[]> joystickListener;
 	
-	public static final Recording tracking = new Recording();
+	public Recording tracking;
 	
-	public LambdaJoystick(int port, Consumer<double[]> joystickListener) {
+	public LambdaJoystick(int port, Consumer<double[]> joystickListener, String fileIn, String fileOut) {
 		super(port);
 		this.joystickListener = joystickListener;
+		tracking = new Recording(fileIn, fileOut);
 	}
 	
 	public static double buffer(double d) {
@@ -26,7 +27,8 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		for (int i = 0; i < buttons.length; i++) {
 			if (buttons[i] != null) {
 				buttons[i].listen(this.getRawButton(i + 1));
-				tracking.addData(new Recording.ButtonPress(i));
+				if(!buttons[i].currentState) tracking.addData(new Recording.ButtonPress(i));
+				else tracking.addRelease();
 			}
 		}
 		

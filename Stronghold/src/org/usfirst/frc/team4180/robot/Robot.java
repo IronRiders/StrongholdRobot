@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 
+import java.util.Arrays;
+
 public class Robot extends IterativeRobot {
 	private static final boolean GHOST_DRIVER = true;
 	
@@ -39,10 +41,10 @@ public class Robot extends IterativeRobot {
 		shooterIntake = new ShooterIntake(SHOOTER_VIC_PORT , SHOOTER_VIC_PORT_2, SHOOTER_SOLENOID_PORT,INTAKE_VIC_PORT_1, INTAKE_VIC_PORT_2);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT, GEAR_SHIFTING_PORT_1, GEAR_SHIFTING_PORT_2);
     	 	
-    	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, joystickInfo -> driveTrain.updateSpeed(joystickInfo));
+    	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, joystickInfo -> driveTrain.updateSpeed(joystickInfo), "", "driving");
     	drivingJoystick.addButton(1, () -> driveTrain.toggleGearShifting(), () -> {});
     	
-    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> shooterIntake.moveArm(joystickInfo[1]));
+    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> shooterIntake.moveArm(joystickInfo[1]), "", "shooting");
     	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> {});
     	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intake(false), () -> shooterIntake.intake(true));
     	//shooterIntakeJoystick.addButton(3, () -> shooterIntake.setRollerVic(-1), () -> shooterIntake.setRollerVic(0));
@@ -60,7 +62,7 @@ public class Robot extends IterativeRobot {
     
     public void autonomousPeriodic() {
     	double[] driveInfo = imageRecognizer.alignShooting();
-    	if(driveInfo.equals(new double[]{0, 0, 0})) {
+    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)) {
     		shooterIntake.shoot();
     	}
     	driveTrain.updateSpeed(driveInfo);
@@ -70,7 +72,6 @@ public class Robot extends IterativeRobot {
     	drivingJoystick.listen();
     	shooterIntakeJoystick.listen();
     	shooterIntake.shooterTic();
-    	writeInstrumentationFile = true;
     }
     
     public void testPeriodic() {
@@ -79,7 +80,8 @@ public class Robot extends IterativeRobot {
     
     public void disabledPeriodic() {
     	if (writeInstrumentationFile) {
-    		LambdaJoystick.tracking.dumpData();
+    		drivingJoystick.tracking.dumpData();
+			shooterIntakeJoystick.tracking.dumpData();
     		writeInstrumentationFile = false;
     	}
     }
