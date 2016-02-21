@@ -4,11 +4,17 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class ImageRecognizer {
 	private NetworkTable table;
-	double moveSpeed = 0.5;
-	double turnSpeed = 0.5;
-
+	double moveSpeed = 0.35;
+	double turnSpeed = 0.25;
+	double IdealX = 166;
+	double IdealY = 123;
+	double Buffer = 4;
+	double ImageScaleFactor =1;
+	double ImageX = 320*ImageScaleFactor;
+	double ImageY = 240*ImageScaleFactor;
+	
 	public ImageRecognizer() {
-		table = NetworkTable.getTable("GRIP/contours");
+		table = NetworkTable.getTable("GRIP/myContoursReport");
 	}
 	
 	public Reflector[] getReflectors() {
@@ -29,6 +35,9 @@ public class ImageRecognizer {
 	}
 	
 	public Reflector findLargest(Reflector[] ref) { //assumes ref is not empty
+		if(ref.length==0){
+			return null;
+		}
 		int largest = 0;
 		
 		for(int i = 1; i < ref.length; i++) {
@@ -41,23 +50,31 @@ public class ImageRecognizer {
 	
 	public double[] alignShooting() {
 		Reflector closestRef = findLargest(getReflectors());
+		if(closestRef==null)
+			return new double[]{4180, 4180, 4180};
+		
+//		if(closestRef.x < (IdealX+Buffer)*ImageScaleFactor &&
+//		   closestRef.x > (IdealX-Buffer)*ImageScaleFactor &&
+//		   closestRef.y < (IdealY+Buffer)*ImageScaleFactor &&
+//		   closestRef.y > (IdealY-Buffer)*ImageScaleFactor)
+		
 		double turnSpeed = 0;
 		double moveSpeed = 0;
 		
-		if(closestRef.x < 155) {
+		if(closestRef.x < (IdealX-Buffer)*ImageScaleFactor) {
 			//turn right
-			turnSpeed = this.turnSpeed;;
+			turnSpeed = -this.turnSpeed;;
 		} 
-		else if(closestRef.x > 165) {
+		else if(closestRef.x > (IdealX+Buffer)*ImageScaleFactor) {
 			//turn left
-			turnSpeed = -this.turnSpeed;
+			turnSpeed = this.turnSpeed;
 		}
 		
-		if(closestRef.y < -1) {
+		if(closestRef.y < (IdealY-Buffer)*ImageScaleFactor) {
 			//move forward
 			moveSpeed = this.moveSpeed;
 		}
-		else if(closestRef.y > -1) {
+		else if(closestRef.y > (IdealY+Buffer)*ImageScaleFactor) {
 			//
 			//move backward
 			moveSpeed = -this.moveSpeed;

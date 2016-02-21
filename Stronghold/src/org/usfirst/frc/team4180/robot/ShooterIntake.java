@@ -11,7 +11,7 @@ public class ShooterIntake {
 	private VictorSP intakeAngle;
 	private VictorSP intakeRoller;
 	
-	private final double driverTrust = 0.1;
+	private final double driverTrust = 0.01;
 	public boolean shooting = false;
 	
 	private int tick = 0;
@@ -29,7 +29,7 @@ public class ShooterIntake {
 	
 	public void intake(boolean stop) {
 		intakeRoller.set(stop ? 0.0 : 0.5);
-		setShooterVic(stop ? 0.0 : 0.07);
+		setShooterVic(stop ? 0.0 : 0.23);
 	}
 
 
@@ -61,8 +61,8 @@ public class ShooterIntake {
 	public void shooterTic() {
 		if(shooting) {
 			tick++;
-			if(tick == 2) setShooterVic(0.5);
-			if(tick == 75) setShooterSolenoid(true);
+			if(tick == 2) setShooterVic(0.6);
+			if(tick == 50) setShooterSolenoid(true);
 			if(tick > 100) setShooterVic(0.5 - (tick - 100) * 0.005);
 			if(tick > 200) {
 				tick = 0;

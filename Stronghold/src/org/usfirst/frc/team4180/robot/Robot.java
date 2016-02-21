@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4180.robot;
 
+import java.util.Arrays;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -29,7 +31,7 @@ public class Robot extends IterativeRobot {
 	private LambdaJoystick  shooterIntakeJoystick;
 	private ImageRecognizer imageRecognizer;
 	
-	private boolean writeInstrumentationFile = false;
+//	private boolean writeInstrumentationFile = false;
 	
 	public void robotInit() {
 		TIMER.start();
@@ -47,41 +49,46 @@ public class Robot extends IterativeRobot {
     	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intake(false), () -> shooterIntake.intake(true));
     	//shooterIntakeJoystick.addButton(3, () -> shooterIntake.setRollerVic(-1), () -> shooterIntake.setRollerVic(0));
     }
- 
+	boolean shot;
     public void autonomousInit() {
-		driveTrain.updateSpeed(new double[] {0, 1, 0});
-		TIMER.delay(10);
-		driveTrain.updateSpeed(new double[] {0, 0, 0});
+    	shooterIntake.shooting = false;
+    	shot = false;
     }
     
-    public void disabledInit() {
-    	writeInstrumentationFile = true;
-    }
-    
+//    public void disabledInit() {
+//    	writeInstrumentationFile = true;
+//    }
+   
     public void autonomousPeriodic() {
+    	
     	double[] driveInfo = imageRecognizer.alignShooting();
-    	if(driveInfo.equals(new double[]{0, 0, 0})) {
-    		shooterIntake.shoot();
+    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)&&!shot) {
+   		shooterIntake.shoot();
+   		shot = true;
     	}
+    	if(!Arrays.equals(new double[]{4180, 4180, 4180}, driveInfo)&&!shot) {
     	driveTrain.updateSpeed(driveInfo);
+    	}
+    	else driveTrain.updateSpeed(new double[]{0, 0, 0});
+    	shooterIntake.shooterTic();
     }
 
     public void teleopPeriodic() {
     	drivingJoystick.listen();
     	shooterIntakeJoystick.listen();
     	shooterIntake.shooterTic();
-    	writeInstrumentationFile = true;
+ //   	writeInstrumentationFile = true;
     }
     
     public void testPeriodic() {
     	
     }
     
-    public void disabledPeriodic() {
-    	if (writeInstrumentationFile) {
-    		LambdaJoystick.tracking.dumpData();
-    		writeInstrumentationFile = false;
-    	}
-    }
+//   public void disabledPeriodic() {
+///    	if (writeInstrumentationFile) {
+//    		LambdaJoystick.tracking.dumpData();
+ //   		writeInstrumentationFile = false;
+//    	}
+  //  }
 }
 
