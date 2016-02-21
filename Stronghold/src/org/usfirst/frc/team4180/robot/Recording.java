@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4180.robot;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,10 +10,9 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Recording
-{
-	private Queue joystickDataOut;
-	private Queue joystickDataIn;
+public class Recording {
+	private Queue<Action> joystickDataOut;
+	private Queue<Action> joystickDataIn;
 
 	private String JOYSTICK_IN_PATH = "";
 	private String JOYSTICK_OUT_PATH = "";
@@ -26,12 +24,17 @@ public class Recording
 		joystickDataOut = new LinkedList();
 		joystickDataIn  = load(JOYSTICK_IN_PATH);
 	}
-	
-	public void addData(Object data) {
-		joystickDataOut.add(data);
+
+	public double getTime() {
+		return joystickDataIn.peek().getTime();
 	}
-	public void addRelease() {
-		((ButtonPress)joystickDataOut.peek()).addRelease();
+
+	public Action tic() {
+		return joystickDataIn.remove();
+	}
+	
+	public void addData(Action data) {
+		joystickDataOut.add(data);
 	}
 	
 	public void dumpData() {
@@ -54,12 +57,11 @@ public class Recording
             stream.close();
         } catch(IOException e) {
             e.printStackTrace();
-            return;
         }
 	}
 	
-	public Queue load(String fileLocation) {
-		Queue toReturn;
+	public Queue<Action> load(String fileLocation) {
+		Queue<Action> toReturn;
 
 		File dataStorage;
 		FileInputStream stream;
@@ -74,7 +76,7 @@ public class Recording
         ObjectInputStream reader;
         try {
             reader = new ObjectInputStream(stream);
-            toReturn = (Queue)reader.readObject();
+            toReturn = (Queue<Action>)reader.readObject();
             reader.close();
             stream.close();
         } catch(IOException | ClassNotFoundException e) {
@@ -84,30 +86,40 @@ public class Recording
 		return toReturn;
 	}
 	
-	public static class ButtonPress {
+	public static class Action {
 		private int pressedButton;
-		private double timePressed;
-		private double timeReleased;
+		private double actionTime;
+		boolean buttonPressed;
+
+		private double[] joystickInfo;
+
+		boolean isButton;
 		
-		public ButtonPress(int buttonNumber) {
+		public Action(int buttonNumber, boolean pressed) {
 			pressedButton = buttonNumber;
-			timePressed = Robot.TIMER.get();
+			actionTime = Robot.TIMER.get();
+			buttonPressed = pressed;
+
+			isButton = true;
 		}
-		
-		public void addRelease() {
-			timeReleased = Robot.TIMER.get();
+
+		public Action(double[] joystick) {
+			joystickInfo = joystick;
+			actionTime = Robot.TIMER.get();
+
+			isButton = false;
 		}
-		
-		public int getButton() {
+
+		public double[] getJoystickInfo() {
+			return joystickInfo;
+		}
+
+		public double getTime() {
+			return actionTime;
+		}
+
+		public int getButtonNumber() {
 			return pressedButton;
-		}
-		
-		public double getTimePressed() {
-			return timePressed;
-		}
-		
-		public double getTimeReleased() {
-			return timeReleased;
 		}
 	}
 }

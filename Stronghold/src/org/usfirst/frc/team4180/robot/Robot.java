@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import java.util.Arrays;
 
 public class Robot extends IterativeRobot {
-	private static final boolean GHOST_DRIVER = true;
+	private static final boolean GHOST_DRIVER = false;
 	
 	private static final int SHOOTER_VIC_PORT = 6;
 	private static final int SHOOTER_VIC_PORT_2 = 7; 
@@ -60,24 +60,39 @@ public class Robot extends IterativeRobot {
     	writeInstrumentationFile = true;
     }
     
-    public void autonomousPeriodic() {
-    	double[] driveInfo = imageRecognizer.alignShooting();
-    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)) {
-    		shooterIntake.shoot();
-    	}
-    	driveTrain.updateSpeed(driveInfo);
-    }
+    public void autonomousPeriodic()
+	{
+		if(!GHOST_DRIVER) {
+			double[] driveInfo = imageRecognizer.alignShooting();
+			if(Arrays.equals(new double[]{0, 0, 0}, driveInfo))	{
+				shooterIntake.shoot();
+			}
+			driveTrain.updateSpeed(driveInfo);
+		}
+		else {
+			LambdaJoystick joystick = drivingJoystick.tracking.getTime() >  shooterIntakeJoystick.tracking.getTime() ? 
+					drivingJoystick : shooterIntakeJoystick;
+			Recording.Action action = joystick.tracking.tic();
+			if(action.isButton) {
+				if(action.buttonPressed) joystick.buttons[action.getButtonNumber()].onKeyDown.run();
+				else joystick.buttons[action.getButtonNumber()].onKeyUp.run();
+			}
+			else {
+				joystick.joystickListener.accept(action.getJoystickInfo());
+			}
+		}
+	}
 
     public void teleopPeriodic() {
     	drivingJoystick.listen();
     	shooterIntakeJoystick.listen();
     	shooterIntake.shooterTic();
     }
-    
+
     public void testPeriodic() {
-    	
+
     }
-    
+
     public void disabledPeriodic() {
     	if (writeInstrumentationFile) {
     		drivingJoystick.tracking.dumpData();
