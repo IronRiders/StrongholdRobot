@@ -10,6 +10,7 @@ public class ShooterIntake {
 	private Solenoid elevationSolenoid;
 	private VictorSP intakeAngle;
 	private VictorSP intakeRoller;
+	private VictorSP intakeArm;
 	
 	private final double driverTrust = 0.01;
 	public boolean shooting = false;
@@ -19,24 +20,24 @@ public class ShooterIntake {
 //	private DigitalInput tooHigh = new DigitalInput(-1);
 //	private DigitalInput tooLow  = new DigitalInput(-1);
 
-	public ShooterIntake(int VicPort, int VicPort2, int solenoidPort, int rollerVicPort, int angleVicPort) {
+	public ShooterIntake(int VicPort, int VicPort2, int solenoidPort, int rollerVicPort, int angleVicPort, int intakeArmPort) {
 		shooterVic = new VictorSP(VicPort);
 		shooterVic2 = new VictorSP(VicPort2);
 		elevationSolenoid = new Solenoid(solenoidPort);
 		intakeAngle = new VictorSP(angleVicPort);
 		intakeRoller = new VictorSP(rollerVicPort);
+		intakeArm = new VictorSP(intakeArmPort);
 	}
 	
 	public void intake(boolean stop) {
 		intakeRoller.set(stop ? 0.0 : 0.5);
 		setShooterVic(stop ? 0.0 : 0.23);
 	}
-
-
-	public void moveArm(double y) {
-	//	if ((!tooHigh.get() && y < 0) || (!tooLow.get() && y > 0)) {
-	//		intakeAngle.set(driverTrust * y);
-	//	}
+	//needs to stop raising
+	//not yet used anywhere
+	//motor values needs to be checked
+	public void setIntakeArm(boolean raise) {
+		intakeArm.set(raise ? 0.5 : -0.5);
 	}
 	
 	public void setShooterVic(double shooterVicSpeed) {
