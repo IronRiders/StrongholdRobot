@@ -14,7 +14,8 @@ public class Robot extends IterativeRobot {
 	private static final int SHOOTER_VIC_PORT = 6;
 	private static final int SHOOTER_VIC_PORT_2 = 7; 
 	private static final int INTAKE_VIC_PORT_1 = 8; 
-	private static final int INTAKE_VIC_PORT_2 = 9; 
+	private static final int INTAKE_VIC_PORT_2 = 9;
+	private static final int INTAKE_ARM_PORT = -1000;
 	private static final int DRIVETRAIN_VIC_PORT_LEFT = 0; 
 	private static final int DRIVETRAIN_VIC_PORT_RIGHT = 1; 
 	
