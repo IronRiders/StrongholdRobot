@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class DriveTrain {
-
+	
 	private VictorSP leftVic;
 	private VictorSP rightVic;
 	private DoubleSolenoid gearShifting;
@@ -24,6 +24,7 @@ public class DriveTrain {
 		double z = JstickInfo[2];
 		double left = y - x;
 		double right = -y - x;
+		
 		shift = Math.abs(left) < 0.5 && Math.abs(right) < 0.5;	
 		leftVic.set(left);
 		rightVic.set(right);

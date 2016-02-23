@@ -31,7 +31,7 @@ public class Robot extends IterativeRobot {
 	private LambdaJoystick  shooterIntakeJoystick;
 	private ImageRecognizer imageRecognizer;
 	
-//	private boolean writeInstrumentationFile = false;
+	private boolean writeInstrumentationFile = false;
 	
 	public void robotInit() {
 		TIMER.start();
@@ -55,40 +55,57 @@ public class Robot extends IterativeRobot {
     	shot = false;
     }
     
-//    public void disabledInit() {
-//    	writeInstrumentationFile = true;
-//    }
+    public void disabledInit() {
+    	writeInstrumentationFile = true;
+    }
    
     public void autonomousPeriodic() {
-    	
-    	double[] driveInfo = imageRecognizer.alignShooting();
-    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)&&!shot) {
-   		shooterIntake.shoot();
-   		shot = true;
+    	if(!GHOST_DRIVER) {
+    		double[] driveInfo = imageRecognizer.alignShooting();
+    		if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)&&!shot) {
+   				shooterIntake.shoot();
+   				shot = true;
+    		}
+    		if(!Arrays.equals(new double[]{4180, 4180, 4180}, driveInfo)&&!shot) {
+    			driveTrain.updateSpeed(driveInfo);
+    		}
+    		else {
+    			driveTrain.updateSpeed(new double[]{0, 0, 0});
+    			shooterIntake.shooterTic();
+    			LambdaJoystick joystick = drivingJoystick.tracking.getTime() >  shooterIntakeJoystick.tracking.getTime() ? 
+				drivingJoystick : shooterIntakeJoystick;
+				Recording.Action action = joystick.tracking.tic();
+				if(action.isButton) {
+					if(action.buttonPressed) {
+						joystick.buttons[action.getButtonNumber()].onKeyDown.run();
+					}
+					else {
+					joystick.buttons[action.getButtonNumber()].onKeyUp.run();
+					}
+				}
+				else {
+					joystick.joystickListener.accept(action.getJoystickInfo());
+				}
+    		}
     	}
-    	if(!Arrays.equals(new double[]{4180, 4180, 4180}, driveInfo)&&!shot) {
-    	driveTrain.updateSpeed(driveInfo);
-    	}
-    	else driveTrain.updateSpeed(new double[]{0, 0, 0});
-    	shooterIntake.shooterTic();
     }
 
     public void teleopPeriodic() {
     	drivingJoystick.listen();
     	shooterIntakeJoystick.listen();
     	shooterIntake.shooterTic();
- //   	writeInstrumentationFile = true;
+    	writeInstrumentationFile = true;
     }
     
     public void testPeriodic() {
     	
     }
     
-//   public void disabledPeriodic() {
-///    	if (writeInstrumentationFile) {
-//    		LambdaJoystick.tracking.dumpData();
- //   		writeInstrumentationFile = false;
-//    	}
-  //  }
+   public void disabledPeriodic() {
+    	if (writeInstrumentationFile) {
+    		drivingJoystick.tracking.dumpData();
+			shooterIntakeJoystick.tracking.dumpData();
+    		writeInstrumentationFile = false;
+    	}
+    }
 }
-
