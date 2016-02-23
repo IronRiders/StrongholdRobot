@@ -66,11 +66,11 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
 		if(!GHOST_DRIVER) {
 			double[] driveInfo = imageRecognizer.alignShooting();
-	    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo) && !shot) {
+	    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)&&!shot) {
 	    		shooterIntake.shoot();
 	    		shot = true;
 	    	}
-	    	if(!Arrays.equals(new double[]{4180, 4180, 4180}, driveInfo) && !shot) {
+	    	if(!Arrays.equals(new double[]{4180, 4180, 4180}, driveInfo)&&!shot) {
 	    		driveTrain.updateSpeed(driveInfo);
 	    	}
 	    	else driveTrain.updateSpeed(new double[]{0, 0, 0});
