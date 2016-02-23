@@ -6,8 +6,10 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 
+import java.util.Arrays;
+
 public class Robot extends IterativeRobot {
-	private static final boolean GHOST_DRIVER = true;
+	private static final boolean GHOST_DRIVER = false;
 	
 	private static final int SHOOTER_VIC_PORT = 6;
 	private static final int SHOOTER_VIC_PORT_2 = 7; 
@@ -31,8 +33,9 @@ public class Robot extends IterativeRobot {
 	private LambdaJoystick  shooterIntakeJoystick;
 	private ImageRecognizer imageRecognizer;
 	
-	private boolean writeInstrumentationFile = false;
-	
+    private boolean writeInstrumentationFile = false;
+    boolean shot;
+    
 	public void robotInit() {
 		TIMER.start();
 		
@@ -41,15 +44,15 @@ public class Robot extends IterativeRobot {
 		shooterIntake = new ShooterIntake(SHOOTER_VIC_PORT , SHOOTER_VIC_PORT_2, SHOOTER_SOLENOID_PORT,INTAKE_VIC_PORT_1, INTAKE_VIC_PORT_2);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT, GEAR_SHIFTING_PORT_1, GEAR_SHIFTING_PORT_2);
     	 	
-    	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, joystickInfo -> driveTrain.updateSpeed(joystickInfo));
+    	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, joystickInfo -> driveTrain.updateSpeed(joystickInfo), "", "driving");
     	drivingJoystick.addButton(1, () -> driveTrain.toggleGearShifting(), () -> {});
     	
-    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> shooterIntake.moveArm(joystickInfo[1]));
+    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> shooterIntake.moveArm(joystickInfo[1]), "", "shooting");
     	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> {});
     	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intake(false), () -> shooterIntake.intake(true));
     	//shooterIntakeJoystick.addButton(3, () -> shooterIntake.setRollerVic(-1), () -> shooterIntake.setRollerVic(0));
     }
-	boolean shot;
+	
     public void autonomousInit() {
     	shooterIntake.shooting = false;
     	shot = false;
@@ -58,37 +61,33 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {
     	writeInstrumentationFile = true;
     }
-   
+    
     public void autonomousPeriodic() {
-    	if(!GHOST_DRIVER) {
-    		double[] driveInfo = imageRecognizer.alignShooting();
-    		if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)&&!shot) {
-   				shooterIntake.shoot();
-   				shot = true;
-    		}
-    		if(!Arrays.equals(new double[]{4180, 4180, 4180}, driveInfo)&&!shot) {
-    			driveTrain.updateSpeed(driveInfo);
-    		}
-    		else {
-    			driveTrain.updateSpeed(new double[]{0, 0, 0});
-    			shooterIntake.shooterTic();
-    			LambdaJoystick joystick = drivingJoystick.tracking.getTime() >  shooterIntakeJoystick.tracking.getTime() ? 
-				drivingJoystick : shooterIntakeJoystick;
-				Recording.Action action = joystick.tracking.tic();
-				if(action.isButton) {
-					if(action.buttonPressed) {
-						joystick.buttons[action.getButtonNumber()].onKeyDown.run();
-					}
-					else {
-					joystick.buttons[action.getButtonNumber()].onKeyUp.run();
-					}
-				}
-				else {
-					joystick.joystickListener.accept(action.getJoystickInfo());
-				}
-    		}
-    	}
-    }
+		if(!GHOST_DRIVER) {
+			double[] driveInfo = imageRecognizer.alignShooting();
+	    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)&&!shot) {
+	    		shooterIntake.shoot();
+	    		shot = true;
+	    	}
+	    	if(!Arrays.equals(new double[]{4180, 4180, 4180}, driveInfo)&&!shot) {
+	    		driveTrain.updateSpeed(driveInfo);
+	    	}
+	    	else driveTrain.updateSpeed(new double[]{0, 0, 0});
+	    	shooterIntake.shooterTic();
+		}
+		else {
+			LambdaJoystick joystick = drivingJoystick.tracking.getTime() >  shooterIntakeJoystick.tracking.getTime() ? 
+					drivingJoystick : shooterIntakeJoystick;
+			Recording.Action action = joystick.tracking.tic();
+			if(action.isButton) {
+				if(action.buttonPressed) joystick.buttons[action.getButtonNumber()].onKeyDown.run();
+				else joystick.buttons[action.getButtonNumber()].onKeyUp.run();
+			}
+			else {
+				joystick.joystickListener.accept(action.getJoystickInfo());
+			}
+		}
+	}
 
     public void teleopPeriodic() {
     	drivingJoystick.listen();
@@ -96,15 +95,15 @@ public class Robot extends IterativeRobot {
     	shooterIntake.shooterTic();
     	writeInstrumentationFile = true;
     }
-    
+
     public void testPeriodic() {
-    	
+
     }
-    
+
    public void disabledPeriodic() {
     	if (writeInstrumentationFile) {
     		drivingJoystick.tracking.dumpData();
-			shooterIntakeJoystick.tracking.dumpData();
+    		shooterIntakeJoystick.tracking.dumpData();
     		writeInstrumentationFile = false;
     	}
     }
