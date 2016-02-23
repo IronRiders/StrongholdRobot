@@ -10,8 +10,8 @@ public class ImageRecognizer {
 	double IdealY = 123;
 	double Buffer = 4;
 	double ImageScaleFactor =1;
-	double ImageX = 320*ImageScaleFactor;
-	double ImageY = 240*ImageScaleFactor;
+	double ImageX = 320 * ImageScaleFactor;
+	double ImageY = 240 * ImageScaleFactor;
 	
 	public ImageRecognizer() {
 		table = NetworkTable.getTable("GRIP/myContoursReport");
@@ -35,9 +35,10 @@ public class ImageRecognizer {
 	}
 	
 	public Reflector findLargest(Reflector[] ref) { //assumes ref is not empty
-		if(ref.length==0){
+		if(ref.length == 0){
 			return null;
 		}
+		
 		int largest = 0;
 		
 		for(int i = 1; i < ref.length; i++) {
@@ -50,7 +51,7 @@ public class ImageRecognizer {
 	
 	public double[] alignShooting() {
 		Reflector closestRef = findLargest(getReflectors());
-		if(closestRef==null)
+		if(closestRef == null)
 			return new double[]{4180, 4180, 4180};
 		
 //		if(closestRef.x < (IdealX+Buffer)*ImageScaleFactor &&
@@ -61,24 +62,11 @@ public class ImageRecognizer {
 		double turnSpeed = 0;
 		double moveSpeed = 0;
 		
-		if(closestRef.x < (IdealX-Buffer)*ImageScaleFactor) {
-			//turn right
-			turnSpeed = -this.turnSpeed;;
-		} 
-		else if(closestRef.x > (IdealX+Buffer)*ImageScaleFactor) {
-			//turn left
-			turnSpeed = this.turnSpeed;
-		}
+		//Turn right if the condition is true, left otherwise
+		turnSpeed = this.turnSpeed * ((closestRef.x < (IdealX - Buffer) * ImageScaleFactor) ? -1 : 1);
+		//Turn forward if the condition is true, backward otherwise
+		moveSpeed = this.moveSpeed * ((closestRef.x < (IdealY - Buffer) * ImageScaleFactor) ? 1 : -1);
 		
-		if(closestRef.y < (IdealY-Buffer)*ImageScaleFactor) {
-			//move forward
-			moveSpeed = this.moveSpeed;
-		}
-		else if(closestRef.y > (IdealY+Buffer)*ImageScaleFactor) {
-			//
-			//move backward
-			moveSpeed = -this.moveSpeed;
-		}
 		//stay still
 		return new double[]{turnSpeed, moveSpeed, 0};
 	}
