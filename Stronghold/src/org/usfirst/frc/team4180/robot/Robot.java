@@ -42,13 +42,13 @@ public class Robot extends IterativeRobot {
 		
 		imageRecognizer = new ImageRecognizer();
 	 
-		shooterIntake = new ShooterIntake(SHOOTER_VIC_PORT , SHOOTER_VIC_PORT_2, SHOOTER_SOLENOID_PORT,INTAKE_VIC_PORT_1, INTAKE_VIC_PORT_2);
+		shooterIntake = new ShooterIntake(SHOOTER_VIC_PORT , SHOOTER_VIC_PORT_2, SHOOTER_SOLENOID_PORT,INTAKE_VIC_PORT_1, INTAKE_VIC_PORT_2, INTAKE_ARM_PORT);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT, GEAR_SHIFTING_PORT_1, GEAR_SHIFTING_PORT_2);
     	 	
     	drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, joystickInfo -> driveTrain.updateSpeed(joystickInfo), "", "driving");
     	drivingJoystick.addButton(1, () -> driveTrain.toggleGearShifting(), () -> {});
     	
-    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> shooterIntake.moveArm(joystickInfo[1]), "", "shooting");
+    	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {}/*shooterIntake.moveArm(joystickInfo[1])*/, "", "shooting");
     	shooterIntakeJoystick.addButton(1, () -> shooterIntake.shoot(), () -> {});
     	shooterIntakeJoystick.addButton(2, () -> shooterIntake.intake(false), () -> shooterIntake.intake(true));
     	//shooterIntakeJoystick.addButton(3, () -> shooterIntake.setRollerVic(-1), () -> shooterIntake.setRollerVic(0));
