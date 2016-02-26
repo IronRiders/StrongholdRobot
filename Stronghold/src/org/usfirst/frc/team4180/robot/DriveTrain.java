@@ -4,12 +4,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class DriveTrain {
-	
+
 	private VictorSP leftVic;
 	private VictorSP rightVic;
 	private DoubleSolenoid gearShifting;
 	
-	private boolean shift = false;
 	private boolean state = false;
 	
 	public DriveTrain(int leftPort, int rightPort, int gearShiftPort1, int gearShiftPort2) {
@@ -21,19 +20,12 @@ public class DriveTrain {
 	public void updateSpeed(double[] JstickInfo) {
 		double x = JstickInfo[0];
 		double y = JstickInfo[1];
-		double z = JstickInfo[2];
-		double left = y - x;
-		double right = -y - x;
-		
-		shift = Math.abs(left) < 0.5 && Math.abs(right) < 0.5;	
-		leftVic.set(left);
-		rightVic.set(right);
+		leftVic.set(y-x);
+		rightVic.set(-y-x);
 	}
 	
 	public void toggleGearShifting() {
-		if(shift) {
 			state = !state;
 			gearShifting.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-		}
 	}
 }
