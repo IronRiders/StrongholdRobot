@@ -27,7 +27,6 @@ public class ImageRecognizer {
 		for(int i = 0; i < areas.length; i++) {
 			reflectors[i] = new Reflector(areas[i], x[i], y[i]);
 		}
-		
 		return reflectors;
 	}
 	
@@ -36,10 +35,9 @@ public class ImageRecognizer {
 		if(ref.length==0)return null;
 		int largest = 0;
 		
-		for(int i = 1; i < ref.length; i++) {
+		for(int i = 1; i < ref.length; i++) 
 			if(ref[i].area > ref[largest].area)
 				largest = i;
-		}
 		
 		return ref[largest];
 	}

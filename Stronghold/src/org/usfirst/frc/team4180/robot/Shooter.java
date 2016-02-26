@@ -10,7 +10,6 @@ public class Shooter {
 	private Solenoid elevationSolenoid;
 		
 	public boolean shooting = false;
-	
 	private int tick = 0;
 	
 	public Shooter(int VicPort, int VicPort2, int solenoidPort) {

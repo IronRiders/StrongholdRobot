@@ -20,8 +20,6 @@ public class Robot extends IterativeRobot {
 	private static final int DRIVING_JOYSTICK_PORT = 1;
 	private static final int SHOOTERINTAKE_JOYSTICK_PORT = 0; 
 	
-	public static final Timer TIMER = new Timer();
-	
 	private Shooter   shooter;
 	private DriveTrain      driveTrain;
 	private LambdaJoystick  drivingJoystick;
@@ -30,8 +28,6 @@ public class Robot extends IterativeRobot {
 	private Solenoid        lift;
 	
 	public void robotInit() {
-		TIMER.start();
-		
 		imageRecognizer = new ImageRecognizer();  
 		shooter = new Shooter(SHOOTER_VIC_PORT , SHOOTER_VIC_PORT_2, SHOOTER_SOLENOID_PORT);
     	driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT, GEAR_SHIFTING_PORT_1, GEAR_SHIFTING_PORT_2);
