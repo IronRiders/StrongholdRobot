@@ -17,6 +17,7 @@ public class ImageRecognizer {
 		table = NetworkTable.getTable("GRIP/myContoursReport");
 	}
 	
+	//returns all reflectors found in the grip contours report
 	public Reflector[] getReflectors() {
 		double[] areas = table.getNumberArray("area", new double[0]);
 		double[] x = table.getNumberArray("centerX", new double[0]);
@@ -30,6 +31,7 @@ public class ImageRecognizer {
 		return reflectors;
 	}
 	
+	//returns Reflector with largest area
 	public Reflector findLargest(Reflector[] ref) { 
 		if(ref == null || ref.length == 0)
 			return null;
@@ -43,6 +45,7 @@ public class ImageRecognizer {
 		return ref[largest];
 	}
 	
+	//returns double array for drive train that contains [turnSpeed, moveSpeed, 0]
 	public double[] alignShooting() {
 		Reflector largestRef = findLargest(getReflectors());
 		if(largestRef==null)

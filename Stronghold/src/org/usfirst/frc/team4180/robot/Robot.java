@@ -61,7 +61,7 @@ public class Robot extends IterativeRobot {
     	if(autoShooting)
     		IRTick();
     	
-    	shooter.shooterTic();
+    	shooter.shooterTick();
     }
 
     public void teleopPeriodic() {
@@ -70,13 +70,14 @@ public class Robot extends IterativeRobot {
         if (autoShooting) {
         	IRTick();
         }
-        shooter.shooterTic();
+        shooter.shooterTick();
     }
     
     public void testPeriodic() {
     	
     }
     
+    //Uses images recognition to align to target and shoot
     public void IRTick(){
     	double[] driveInfo = imageRecognizer.alignShooting();
     	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)) {

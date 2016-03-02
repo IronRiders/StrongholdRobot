@@ -11,6 +11,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		this.joystickListener = joystickListener;
 	}
 	
+	//accounts for joystick error by rounding small numbers to 0
 	public static double buffer(double d) {
 		return (d > 0.05 || d < -0.05) ? d : 0;
 	}
@@ -26,10 +27,8 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 				buttons[i].listen(this.getRawButton(i + 1));
 			}
 		}
-		
-		double[] joystickData = {buffer(this.getX()), buffer(this.getY()), buffer(this.getZ())};
-		//Do whatever we've told the joystick it should
-		joystickListener.accept(joystickData);
+
+		joystickListener.accept(new double[] {buffer(this.getX()), buffer(this.getY()), buffer(this.getZ())});
 	}
 	
 	private class Button {

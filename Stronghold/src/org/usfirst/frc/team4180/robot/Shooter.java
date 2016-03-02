@@ -23,12 +23,14 @@ public class Shooter {
 		shooterVic2.set(shooterVicSpeed);
 	}
 
+	//starts the shooting sequence (will only work if shooterTick is called periodically)
 	public void shoot() {
 		shooting = true;
 		tick = 0;
 	}
 	
-	public void shooterTic() {
+	//Is called periodically and shoots if tick >= 200 and shooting is true
+	public void shooterTick() {
 		if(shooting) {
 			tick++;
 			if(tick == 2) setShooterVic(0.6);

@@ -17,6 +17,7 @@ public class DriveTrain {
 		gearShifting = new DoubleSolenoid(gearShiftPort1, gearShiftPort2);
 	}
 
+	//takes double array [x,y] and sets the speeds to that
 	public void updateSpeed(double[] JstickInfo) {
 		double x = JstickInfo[0];
 		double y = JstickInfo[1];
