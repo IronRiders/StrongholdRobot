@@ -26,6 +26,7 @@ public class Robot extends IterativeRobot {
 	private LambdaJoystick  shooterIntakeJoystick;
 	private ImageRecognizer imageRecognizer;
 	private Solenoid        lift;
+	private boolean			autoShooting;
 	
 	public void robotInit() {
 		imageRecognizer = new ImageRecognizer();  
@@ -38,42 +39,52 @@ public class Robot extends IterativeRobot {
     	//drivingJoystick.addButton(1, () -> lift.set(!lift.get()), () -> {});
     	
     	shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, (joystickInfo) -> {});
-    	shooterIntakeJoystick.addButton(1, () -> shooter.shoot(), () -> {});
+    	shooterIntakeJoystick.addButton(1, () -> autoShooting = true, () -> autoShooting = false);
     	shooterIntakeJoystick.addButton(2, () -> shooter.setShooterVic(0.2), () -> shooter.setShooterVic(0));
     	shooterIntakeJoystick.addButton(3, () -> shooter.setShooterVic(-0.3), () -> shooter.setShooterVic(0));
     }
-	boolean shot;
+
     public void autonomousInit() {
     	shooter.shooting = false;
-    	shot = false;
+    	autoShooting = true;
     }
     
     public void testInit() {
     	
     }
+    
+    public void teleopInit() {
+    	autoShooting = false;
+    }
      
     public void autonomousPeriodic() {
-    	IRTick();
+    	if(autoShooting)
+    		IRTick();
+    	
+    	shooter.shooterTic();
     }
 
     public void teleopPeriodic() {
     	drivingJoystick.listen();
-        shooterIntakeJoystick.listen();
-        shooter.shooterTic();   	
+        shooterIntakeJoystick.listen();   	
+        if (autoShooting) {
+        	IRTick();
+        }
+        shooter.shooterTic();
     }
     
     public void testPeriodic() {
     	
     }
+    
     public void IRTick(){
     	double[] driveInfo = imageRecognizer.alignShooting();
-    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo) && !shot) {
+    	if(Arrays.equals(new double[]{0, 0, 0}, driveInfo)) {
     		shooter.shoot();
-    		shot = true;
+    		autoShooting = false;
     	}
-    	if(!Arrays.equals(new double[]{4180, 4180, 4180}, driveInfo) && !shot) 
+    	if(driveInfo != null) 
     		driveTrain.updateSpeed(driveInfo);
     	else driveTrain.updateSpeed(new double[]{0, 0, 0});
-    	shooter.shooterTic();
     }
 }

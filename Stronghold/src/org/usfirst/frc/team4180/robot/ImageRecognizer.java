@@ -31,8 +31,9 @@ public class ImageRecognizer {
 	}
 	
 	public Reflector findLargest(Reflector[] ref) { 
-		if(ref == null) return null;
-		if(ref.length==0)return null;
+		if(ref == null || ref.length == 0)
+			return null;
+		
 		int largest = 0;
 		
 		for(int i = 1; i < ref.length; i++) 
@@ -43,25 +44,25 @@ public class ImageRecognizer {
 	}
 	
 	public double[] alignShooting() {
-		Reflector closestRef = findLargest(getReflectors());
-		if(closestRef==null)
-			return new double[]{4180, 4180, 4180};
+		Reflector largestRef = findLargest(getReflectors());
+		if(largestRef==null)
+			return null;
 		
 		double turnSpeed = 0;
 		double moveSpeed = 0;
 		
-		if(closestRef.x < (IdealX-Buffer)*ImageScaleFactor) 
-			turnSpeed =  this.turnSpeed*((closestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))-0.03;
+		if(largestRef.x < (IdealX-Buffer)*ImageScaleFactor) 
+			turnSpeed =  this.turnSpeed*((largestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))-0.03;
 		
-		else if(closestRef.x > (IdealX+Buffer)*ImageScaleFactor)
-			turnSpeed =  this.turnSpeed*((closestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))+0.03;
+		else if(largestRef.x > (IdealX+Buffer)*ImageScaleFactor)
+			turnSpeed =  this.turnSpeed*((largestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))+0.03;
 		
 		
-		if(closestRef.y < (IdealY-Buffer)*ImageScaleFactor) 
-			moveSpeed = -this.moveSpeed*((closestRef.y-IdealY)/Math.max(IdealX,ImageX-IdealX))+0.1;
+		if(largestRef.y < (IdealY-Buffer)*ImageScaleFactor) 
+			moveSpeed = -this.moveSpeed*((largestRef.y-IdealY)/Math.max(IdealX,ImageX-IdealX))+0.1;
 		
-		else if(closestRef.y > (IdealY+Buffer)*ImageScaleFactor)
-			moveSpeed = -this.moveSpeed*((closestRef.y-IdealY)/Math.max(IdealX,ImageX-IdealX))-0.1;
+		else if(largestRef.y > (IdealY+Buffer)*ImageScaleFactor)
+			moveSpeed = -this.moveSpeed*((largestRef.y-IdealY)/Math.max(IdealX,ImageX-IdealX))-0.1;
 		
 		return new double[]{turnSpeed, moveSpeed, 0};
 	}
