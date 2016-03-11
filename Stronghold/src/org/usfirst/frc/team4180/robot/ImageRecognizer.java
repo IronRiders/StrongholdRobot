@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 public class ImageRecognizer {
 	private NetworkTable table;
 	double moveSpeed = 1;
-	double turnSpeed = 0.6;
-	double IdealX = 166;
-	double IdealY = 40;
+	double turnSpeed = 1.1;
+	double IdealX = 171;
+	double IdealY = 20;
 	double Buffer = 7;
 	double ImageScaleFactor =1;
 	double ImageX = 320*ImageScaleFactor;
@@ -55,10 +55,10 @@ public class ImageRecognizer {
 		double moveSpeed = 0;
 		
 		if(largestRef.x < (IdealX-Buffer)*ImageScaleFactor) 
-			turnSpeed =  this.turnSpeed*((largestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))-0.03;
+			turnSpeed =  this.turnSpeed*((largestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))-0.07;
 		
 		else if(largestRef.x > (IdealX+Buffer)*ImageScaleFactor)
-			turnSpeed =  this.turnSpeed*((largestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))+0.03;
+			turnSpeed =  this.turnSpeed*((largestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))+0.07;
 		
 		
 		if(largestRef.y < (IdealY-Buffer)*ImageScaleFactor) 

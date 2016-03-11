@@ -15,7 +15,7 @@ public class DriveTrain {
 		leftVic = new VictorSP(leftPort);
 		rightVic = new VictorSP(rightPort);
 		gearShifting = new DoubleSolenoid(gearShiftPort1, gearShiftPort2);
-	}
+	}	
 
 	//takes double array [x,y] and sets the speeds to that
 	public void updateSpeed(double[] JstickInfo) {
@@ -23,10 +23,10 @@ public class DriveTrain {
 		double y = JstickInfo[1];
 		leftVic.set(y-x);
 		rightVic.set(-y-x);
-	}
+	}	
 	
 	public void toggleGearShifting() {
-			state = !state;
-			gearShifting.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-	}
+		state = !state;
+		gearShifting.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+	}	
 }

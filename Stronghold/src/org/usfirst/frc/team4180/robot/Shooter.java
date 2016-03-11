@@ -9,7 +9,7 @@ public class Shooter {
 	private VictorSP shooterVic2;
 	private Solenoid elevationSolenoid;
 		
-	public boolean shooting = false;
+	public boolean isShooting = false;
 	private int tick = 0;
 	
 	public Shooter(int VicPort, int VicPort2, int solenoidPort) {
@@ -25,20 +25,20 @@ public class Shooter {
 
 	//starts the shooting sequence (will only work if shooterTick is called periodically)
 	public void shoot() {
-		shooting = true;
+		isShooting = true;
 		tick = 0;
 	}
 	
 	//Is called periodically and shoots if tick >= 200 and shooting is true
 	public void shooterTick() {
-		if(shooting) {
+		if(isShooting) {
 			tick++;
 			if(tick == 2) setShooterVic(0.6);
 			if(tick == 50) elevationSolenoid.set(true);
 			if(tick > 100) setShooterVic(0.5 - (tick - 100) * 0.005);
 			if(tick > 200) {
 				tick = 0;
-				shooting = false;
+				isShooting = false;
 				elevationSolenoid.set(false);
 			}
 		}

@@ -11,7 +11,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		this.joystickListener = joystickListener;
 	}
 	
-	//accounts for joystick error by rounding small numbers to 0
+	//accounts for joy-stick error by rounding small numbers to 0
 	public static double buffer(double d) {
 		return (d > 0.05 || d < -0.05) ? d : 0;
 	}
