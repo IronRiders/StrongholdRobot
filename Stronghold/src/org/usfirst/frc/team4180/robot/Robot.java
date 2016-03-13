@@ -34,8 +34,10 @@ public class Robot extends IterativeRobot {
 	private ImageRecognizer imageRecognizer;
 	private Solenoid lift;
 	private boolean autoShooting;
+	private UltrasonicRangeSensor ur;
 
 	public void robotInit() {
+		ur = new UltrasonicRangeSensor(0);
 		imageRecognizer = new ImageRecognizer();
 		shooter = new Shooter(SHOOTER_VIC_PORT, SHOOTER_VIC_PORT_2,
 				SHOOTER_SOLENOID_PORT);
@@ -49,8 +51,8 @@ public class Robot extends IterativeRobot {
 		drivingJoystick.addButton(2, () -> driveTrain.toggleGearShifting(),
 				() -> {
 				});
-		drivingJoystick.addButton(1, () -> lift.set(false),
-				() -> lift.set(true));
+		drivingJoystick.addButton(1, () -> lift.set(true),
+				() -> lift.set(false));
 
 		shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT,
 				(joystickInfo) -> {
@@ -61,7 +63,8 @@ public class Robot extends IterativeRobot {
 				() -> shooter.setShooterVic(0));
 		shooterIntakeJoystick.addButton(3, () -> shooter.setShooterVic(-0.3),
 				() -> shooter.setShooterVic(0));
-
+		shooterIntakeJoystick.addButton(4,()-> shooter.shoot(),()->{});
+		shooterIntakeJoystick.addButton(5,()-> shooter.setShooterVic(-0.75),()->shooter.setShooterVic(0));
 		// String dashData = SmartDashboard.getString("DB/String 0",
 		// "Waiting for a command");
 		// if (dashData.equals("Spy")) {
@@ -116,23 +119,29 @@ public class Robot extends IterativeRobot {
 		if (autoShooting) {
 			IRTick();
 		}
+//		shooter.shoot();
 		shooter.shooterTick();
-		if (!autoShooting && !shooter.isShooting && tick > 1) {
-			tick = 1;
-			tick++;
-			cas = 150;
-		}
-		if (tick < 50 && cas == 150) {
-			driveTrain.updateSpeed(new double[] { 0.75, 0, 0 });
-			return;
-		}
-		if (tick > 50 && cas == 150) {
-			driveTrain.updateSpeed(new double[] { 0, 0, 0 });
-		}
+//		if (!autoShooting && !shooter.isShooting && tick > 1) {
+///			tick = 1;
+//			tick++;
+//			cas = 150;
+//		}
+	//	if (tick < 50 && cas == 150) {
+	//		driveTrain.updateSpeed(new double[] { 0.75, 0, 0 });
+	//		return;
+//		}
+	///	if (tick > 50 && cas == 150) {
+	//		driveTrain.updateSpeed(new double[] { 0, 0, 0 });
+	//	}
 	}
 
 	public void teleopPeriodic() {
-
+		SmartDashboard.putString("DB/String 6" ,""+ur.getRangeInches());
+	//	SmartDashboard.putNumber("DB/Slider 0", (Math.random()*5));
+	//	SmartDashboard.putNumber("DB/Slider 1", (Math.random()*5));
+	//	SmartDashboard.putNumber("DB/Slider 2", (Math.random()*5));
+	//	SmartDashboard.putNumber("DB/Slider 3", (Math.random()*5));
+		
 		shooterIntakeJoystick.listen();
 		if (autoShooting) {
 			IRTick();
@@ -149,10 +158,10 @@ public class Robot extends IterativeRobot {
 	// Uses images recognition to align to target and shoot
 	public void IRTick() {
 		double[] driveInfo = imageRecognizer.alignShooting();
-		if (Arrays.equals(new double[] { 0, 0, 0 }, driveInfo)) {
+		double minSpeed = 0.1;
+		if (Arrays.equals(new double[] { 0, 0, 0 }, new double[]{tolerate(driveInfo[0],minSpeed),tolerate(driveInfo[1],minSpeed),tolerate(driveInfo[2],minSpeed)})) {
 			shooter.shoot();
 			autoShooting = false;
-
 		}
 		if (driveInfo != null) {
 			driveTrain.updateSpeed(driveInfo);
@@ -160,4 +169,8 @@ public class Robot extends IterativeRobot {
 			driveTrain.updateSpeed(new double[] { 0, 0, 0 });
 		}
 	}
+	public double tolerate(double x, double tolerance){
+		return Math.abs(x)>tolerance ? x : 0;
+	}
 }
+	

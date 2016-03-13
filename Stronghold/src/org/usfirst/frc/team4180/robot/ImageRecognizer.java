@@ -6,7 +6,7 @@ public class ImageRecognizer {
 	private NetworkTable table;
 	double moveSpeed = 1;
 	double turnSpeed = 1.1;
-	double IdealX = 171;
+	double IdealX = 176;
 	double IdealY = 20;
 	double Buffer = 7;
 	double ImageScaleFactor =1;
@@ -45,7 +45,7 @@ public class ImageRecognizer {
 		return ref[largest];
 	}
 	
-	//returns double array for drive train that contains [turnSpeed, moveSpeed, 0]
+	//reSturns double array for drive train that contains [turnSpeed, moveSpeed, 0]
 	public double[] alignShooting() {
 		Reflector largestRef = findLargest(getReflectors());
 		if(largestRef==null)
