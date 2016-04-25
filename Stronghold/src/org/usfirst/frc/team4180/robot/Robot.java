@@ -24,52 +24,44 @@ public class Robot extends IterativeRobot {
 
 	private static final int DRIVING_JOYSTICK_PORT = 1;
 	private static final int SHOOTERINTAKE_JOYSTICK_PORT = 0;
+	
+	private static final int ENCODER_PORT_1 = -1; //figure out robot ports
+	private static final int ENCODER_PORT_2 = -1;
 
 	private static final String LOW_BAR_STRING = "low";
 	private static final String SPY_ZONE_STRING = "spy";
-	private Shooter shooter;
-	private DriveTrain driveTrain;
-	private LambdaJoystick drivingJoystick;
-	private LambdaJoystick shooterIntakeJoystick;
-	private ImageRecognizer imageRecognizer;
-	private Solenoid lift;
-	private boolean autoShooting;
-	private UltrasonicRangeSensor ur;
+	
+	private Shooter 			  shooter;
+	private DriveTrain 			  driveTrain;
+	private LambdaJoystick  	  drivingJoystick;
+	private LambdaJoystick  	  shooterIntakeJoystick;
+	private ImageRecognizer 	  imageRecognizer;
+	private Solenoid 			  lift;
+	private boolean 			  autoShooting;
+	private UltrasonicRangeSensor rangeSensor;
+	
 
 	public void robotInit() {
-		ur = new UltrasonicRangeSensor(0);
+		rangeSensor = new UltrasonicRangeSensor(0);
 		imageRecognizer = new ImageRecognizer();
 		shooter = new Shooter(SHOOTER_VIC_PORT, SHOOTER_VIC_PORT_2,
-				SHOOTER_SOLENOID_PORT);
+				SHOOTER_SOLENOID_PORT, ENCODER_PORT_1, ENCODER_PORT_2);
 		driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT,
 				DRIVETRAIN_VIC_PORT_RIGHT, GEAR_SHIFTING_PORT_1,
 				GEAR_SHIFTING_PORT_2);
 		lift = new Solenoid(LIFTING_PORT);
 
-		drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT,
-				joystickInfo -> driveTrain.updateSpeed(joystickInfo));
-		drivingJoystick.addButton(2, () -> driveTrain.toggleGearShifting(),
-				() -> {
-				});
-		drivingJoystick.addButton(1, () -> lift.set(true),
-				() -> lift.set(false));
+		drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, joystickInfo -> driveTrain.updateSpeed(joystickInfo));
+		drivingJoystick.addButton(2, () -> driveTrain.toggleGearShifting(), () -> {});
+		drivingJoystick.addButton(1, () -> lift.set(true), () -> lift.set(false));
 
-		shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT,
-				(joystickInfo) -> {
-				});
-		shooterIntakeJoystick.addButton(1, () -> autoShooting = true,
-				() -> autoShooting = false);
-		shooterIntakeJoystick.addButton(2, () -> shooter.setShooterVic(0.2),
-				() -> shooter.setShooterVic(0));
-		shooterIntakeJoystick.addButton(3, () -> shooter.setShooterVic(-0.3),
-				() -> shooter.setShooterVic(0));
-		shooterIntakeJoystick.addButton(4,()-> shooter.shoot(),()->{});
-		shooterIntakeJoystick.addButton(5,()-> shooter.setShooterVic(-0.75),()->shooter.setShooterVic(0));
-		// String dashData = SmartDashboard.getString("DB/String 0",
-		// "Waiting for a command");
-		// if (dashData.equals("Spy")) {
-		// SmartDashboard.putString("DB/String 5", "Starting from Spy Box...");
-		// }
+		shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, joystickInfo -> {});
+		shooterIntakeJoystick.addButton(1, () -> autoShooting = true, () -> autoShooting = false);
+		shooterIntakeJoystick.addButton(2, () -> shooter.setShooterVic(0.3), () -> shooter.setShooterVic(0));
+		shooterIntakeJoystick.addButton(3, () -> shooter.setShooterVic(-0.4), () -> shooter.setShooterVic(0));
+		shooterIntakeJoystick.addButton(4, () ->  shooter.shoot(), () -> {});
+		shooterIntakeJoystick.addButton(5, () -> {shooter.setShooterVic(-0.9);}, () -> {shooter.setShooterVic(0);});
+		shooterIntakeJoystick.addButton(7, () -> {shooter.elevationSolenoid.set(true);}, () -> {shooter.elevationSolenoid.set(false);});
 	}
 
 	public void autonomousInit() {
@@ -83,12 +75,12 @@ public class Robot extends IterativeRobot {
 		switch (autoMode) {
 		case LOW_BAR_STRING:
 			SmartDashboard.putString("DB/String 5", "Low Bar Mode");
-			cas = 0;
+			//cas = 0;
 			break;
 
 		case SPY_ZONE_STRING:
 			SmartDashboard.putString("DB/String 5", "Spy Zone Mode");
-			cas = 1;
+		//	cas = 1;
 			break;
 		}
 	}
@@ -107,12 +99,13 @@ public class Robot extends IterativeRobot {
 	int tick = 0;
 
 	public void autonomousPeriodic() {
+	//	driveTrain.updateSpeed(new double[] { 0, -0.35, 0 });
 		tick++;
-		if (cas == 0 && tick < 100) {
+		if (cas == 0 && tick < 130) {
 			driveTrain.updateSpeed(new double[] { 0, -0.75, 0 });
 			return;
 		}
-		if (cas == 0 && tick > 100 && tick < 120) {
+		if (cas == 0 && tick > 130 && tick < 150) {
 			driveTrain.updateSpeed(new double[] { 0.75, -0.2, 0 });
 			return;
 		}
@@ -136,10 +129,10 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		SmartDashboard.putString("DB/String 6" ,""+ur.getRangeInches());
+	//	SmartDashboard.putString("DB/String 6" ,""+rangeSensor.getRangeInches());
 	//	SmartDashboard.putNumber("DB/Slider 0", (Math.random()*5));
 	//	SmartDashboard.putNumber("DB/Slider 1", (Math.random()*5));
-	//	SmartDashboard.putNumber("DB/Slider 2", (Math.random()*5));
+	//	SmartDashboard.put Number("DB/Slider 2", (Math.random()*5));
 	//	SmartDashboard.putNumber("DB/Slider 3", (Math.random()*5));
 		
 		shooterIntakeJoystick.listen();
@@ -158,16 +151,16 @@ public class Robot extends IterativeRobot {
 	// Uses images recognition to align to target and shoot
 	public void IRTick() {
 		double[] driveInfo = imageRecognizer.alignShooting();
-		double minSpeed = 0.1;
+		double minSpeed = 0.05;
+		if (driveInfo == null) {
+			driveTrain.updateSpeed(new double[] { 0, 0, 0 });
+			return;
+		}
 		if (Arrays.equals(new double[] { 0, 0, 0 }, new double[]{tolerate(driveInfo[0],minSpeed),tolerate(driveInfo[1],minSpeed),tolerate(driveInfo[2],minSpeed)})) {
 			shooter.shoot();
 			autoShooting = false;
 		}
-		if (driveInfo != null) {
 			driveTrain.updateSpeed(driveInfo);
-		} else {
-			driveTrain.updateSpeed(new double[] { 0, 0, 0 });
-		}
 	}
 	public double tolerate(double x, double tolerance){
 		return Math.abs(x)>tolerance ? x : 0;

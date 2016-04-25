@@ -13,7 +13,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 	
 	//accounts for joy-stick error by rounding small numbers to 0
 	public static double buffer(double d) {
-		return (d > 0.05 || d < -0.05) ? d : 0;
+		return (d > 0.03 || d < -0.03) ? d : 0;
 	}
 	
 	public void addButton(int buttonNum, Runnable onKeyDown, Runnable onKeyUp) {

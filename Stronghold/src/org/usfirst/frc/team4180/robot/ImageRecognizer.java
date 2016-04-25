@@ -6,17 +6,17 @@ public class ImageRecognizer {
 	private NetworkTable table;
 	double moveSpeed = 1;
 	double turnSpeed = 1.1;
-	double IdealX = 176;
-	double IdealY = 20;
-	double Buffer = 7;
-	double ImageScaleFactor =1;
-	double ImageX = 320*ImageScaleFactor;
-	double ImageY = 240*ImageScaleFactor;
-	
+	double IdealX = 176;// maybe this
+	double IdealY = 34;//change this
+	double Buffer = 4;// maybe change this
+	double ImageScaleFactor = 1;
+	double ImageX = 320 * ImageScaleFactor;
+	double ImageY = 240 * ImageScaleFactor;
+
 	public ImageRecognizer() {
 		table = NetworkTable.getTable("GRIP/myContoursReport");
 	}
-	
+
 	//returns all reflectors found in the grip contours report
 	public Reflector[] getReflectors() {
 		double[] areas = table.getNumberArray("area", new double[0]);
@@ -33,9 +33,10 @@ public class ImageRecognizer {
 	
 	//returns Reflector with largest area
 	public Reflector findLargest(Reflector[] ref) { 
-		if(ref == null || ref.length == 0)
+		if(ref == null || ref.length == 0) {
 			return null;
-		
+		}
+			
 		int largest = 0;
 		
 		for(int i = 1; i < ref.length; i++) 
@@ -48,24 +49,27 @@ public class ImageRecognizer {
 	//reSturns double array for drive train that contains [turnSpeed, moveSpeed, 0]
 	public double[] alignShooting() {
 		Reflector largestRef = findLargest(getReflectors());
-		if(largestRef==null)
-			return null;
+		if(largestRef == null)
+			return null; 
 		
 		double turnSpeed = 0;
 		double moveSpeed = 0;
 		
-		if(largestRef.x < (IdealX-Buffer)*ImageScaleFactor) 
-			turnSpeed =  this.turnSpeed*((largestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))-0.07;
+		if(largestRef.x < (IdealX - Buffer) * ImageScaleFactor)
+			turnSpeed =  Math.min((this.turnSpeed * ((largestRef.x - IdealX)/Math.max(IdealX, ImageX - IdealX)) - 0.07), -0.25);
+		//change to biggest negative x where robot still turns
 		
-		else if(largestRef.x > (IdealX+Buffer)*ImageScaleFactor)
-			turnSpeed =  this.turnSpeed*((largestRef.x-IdealX)/Math.max(IdealX,ImageX-IdealX))+0.07;
+		else if(largestRef.x > (IdealX + Buffer) * ImageScaleFactor)
+			turnSpeed =  Math.max((this.turnSpeed * ((largestRef.x - IdealX)/Math.max(IdealX, ImageX - IdealX)) + 0.07), 0.25);
+		//change to smallest positive x where robot still turns
 		
+		if(largestRef.y < (IdealY - Buffer) * ImageScaleFactor)
+			moveSpeed = Math.max((-this.moveSpeed * ((largestRef.y - IdealY)/Math.max(IdealX, ImageX - IdealX)) + 0.1), 0.07);
+		//change to smallest possible y where robot still moves
 		
-		if(largestRef.y < (IdealY-Buffer)*ImageScaleFactor) 
-			moveSpeed = -this.moveSpeed*((largestRef.y-IdealY)/Math.max(IdealX,ImageX-IdealX))+0.1;
-		
-		else if(largestRef.y > (IdealY+Buffer)*ImageScaleFactor)
-			moveSpeed = -this.moveSpeed*((largestRef.y-IdealY)/Math.max(IdealX,ImageX-IdealX))-0.1;
+		else if(largestRef.y > (IdealY + Buffer) * ImageScaleFactor)
+			moveSpeed = Math.min((-this.moveSpeed * ((largestRef.y - IdealY)/Math.max(IdealX, ImageX - IdealX)) - 0.1), -0.07);
+		//change to biggest negative y where robot still moves
 		
 		return new double[]{turnSpeed, moveSpeed, 0};
 	}
@@ -78,5 +82,5 @@ public class ImageRecognizer {
 			 this.x = x;
 			 this.y = y;
 		 }
-	 }	
+	 }
 }
