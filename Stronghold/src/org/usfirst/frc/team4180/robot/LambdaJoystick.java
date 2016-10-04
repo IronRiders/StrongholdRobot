@@ -11,17 +11,12 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		this.joystickListener = joystickListener;
 	}
 	
-	//accounts for joy-stick error by rounding small numbers to 0
-	public static double buffer(double d) {
-		return (d > 0.03 || d < -0.03) ? d : 0;
-	}
-	
 	public void addButton(int buttonNum, Consumer<Boolean> toggler) {
 		addButton(buttonNum, () -> toggler.accept(true), () -> toggler.accept(false))
 	}
 
 	public void addButton(int buttonNum, Runnable onKeyDown, Runnable onKeyUp) {
-		buttons[buttonNum-1] = new Button(onKeyDown, onKeyUp);
+		buttons[buttonNum - 1] = new Button(onKeyDown, onKeyUp);
 	}
 	
 	public void listen() {
@@ -32,10 +27,14 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 			}
 		}
 
-		joystickListener.accept(new double[] {buffer(this.getX()), buffer(this.getY()), buffer(this.getZ())});
+		final int x = this.getX();
+		final int y = this.getY();
+		final int z = this.getZ();
+
+		joystickListener.accept(new double[] {x, y, z});
 	}
 	
-	private class Button {
+	private static class Button {
 		public boolean currentState = false;
 		public Runnable onKeyDown;
 		public Runnable onKeyUp;

@@ -2,28 +2,29 @@ package org.usfirst.frc.team4180.robot;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
-public class ImageRecognizer {
-	private NetworkTable table;
-	double moveSpeed = 1;
-	double turnSpeed = 1.1;
-	double IdealX = 176;// maybe this
-	double IdealY = 34;//change this
-	double Buffer = 4;// maybe change this
-	double ImageScaleFactor = 1;
-	double ImageX = 320 * ImageScaleFactor;
-	double ImageY = 240 * ImageScaleFactor;
+private class ImageRecognizer {
+	private final NetworkTable table;
+	//Where did this numbers come from?
+	private double moveSpeed = 1; //TODO: Figure out if these are being shadowed
+	private double turnSpeed = 1.1;
+	private static final double IDEAL__X = 176;
+	private static final double IDEAL__Y = 34;
+	private static final double BUFFER = 4;
+	private static final double IMAGE_SCALE_FACTOR = 1;
+	private static final double IMAGE_X = 320 * IMAGE_SCALE_FACTOR;
+	private static final double IMAGE_Y = 240 * IMAGE_SCALE_FACTOR;
 
-	public ImageRecognizer() {
+	private ImageRecognizer() {
 		table = NetworkTable.getTable("GRIP/myContoursReport");
 	}
 
 	//returns all reflectors found in the grip contours report
-	public Reflector[] getReflectors() {
-		double[] areas = table.getNumberArray("area", new double[0]);
-		double[] x = table.getNumberArray("centerX", new double[0]);
-		double[] y = table.getNumberArray("centerY", new double[0]);
+	private Reflector[] getReflectors() {
+		final double[] areas = table.getNumberArray("area", new double[0]);
+		final double[] x = table.getNumberArray("centerX", new double[0]);
+		final double[] y = table.getNumberArray("centerY", new double[0]);
 		
-		Reflector[] reflectors = new Reflector[areas.length];
+		final Reflector[] reflectors = new Reflector[areas.length];
 		
 		for(int i = 0; i < areas.length; i++) {
 			reflectors[i] = new Reflector(areas[i], x[i], y[i]);
@@ -32,52 +33,56 @@ public class ImageRecognizer {
 	}
 	
 	//returns Reflector with largest area
-	public Reflector findLargest(Reflector[] ref) { 
-		if(ref == null || ref.length == 0) {
+	private static Reflector findLargest(Reflector[] refs) { 
+		if(refs.length == 0) {
 			return null;
 		}
-			
-		int largest = 0;
-		
-		for(int i = 1; i < ref.length; i++) 
-			if(ref[i].area > ref[largest].area)
+
+		Reflector largest = refs[1];
+		for(int i = 2; i < refs.length; i++) { //Why skip refs[0]?
+			if(refs[i].area > largest.area) {
 				largest = i;
+			}
+		}
 		
-		return ref[largest];
+		return largest;
 	}
 	
 	//reSturns double array for drive train that contains [turnSpeed, moveSpeed, 0]
 	public double[] alignShooting() {
-		Reflector largestRef = findLargest(getReflectors());
-		if(largestRef == null)
-			return null; 
+		final Reflector largestRef = findLargest(getReflectors());
+		if(largestRef == null) return null; 
 		
-		double turnSpeed = 0;
-		double moveSpeed = 0;
+		double turnSpeed = 0; //ω
+		double moveSpeed = 0; //v
 		
-		if(largestRef.x < (IdealX - Buffer) * ImageScaleFactor)
-			turnSpeed =  Math.min((this.turnSpeed * ((largestRef.x - IdealX)/Math.max(IdealX, ImageX - IdealX)) - 0.07), -0.25);
-		//change to biggest negative x where robot still turns
+		if(largestRef.x < (IX - BUFFER) * IMAGE_SCALE_FACTOR) {
+			turnSpeed =  Math.min((this.turnSpeed * ((largestRef.x - IDEAL_X)/Math.max(IDEAL_X, ImageX - IDEAL_X)) - 0.07), -0.25);
+		    //change to biggest negative x where robot still turns
+		}
 		
-		else if(largestRef.x > (IdealX + Buffer) * ImageScaleFactor)
-			turnSpeed =  Math.max((this.turnSpeed * ((largestRef.x - IdealX)/Math.max(IdealX, ImageX - IdealX)) + 0.07), 0.25);
-		//change to smallest positive x where robot still turns
+		else if(largestRef.x > (IDEAL_X + BUFFER) * IMAGE_SCALE_FACTOR) {
+			turnSpeed =  Math.max((this.turnSpeed * ((largestRef.x - IDEAL_X)/Math.max(IDEAL_X, ImageX - IDEAL_X)) + 0.07), 0.25);
+	     	//change to smallest positive x where robot still turns
+		}
 		
-		if(largestRef.y < (IdealY - Buffer) * ImageScaleFactor)
-			moveSpeed = Math.max((-this.moveSpeed * ((largestRef.y - IdealY)/Math.max(IdealX, ImageX - IdealX)) + 0.1), 0.07);
-		//change to smallest possible y where robot still moves
+		if(largestRef.y < (IDEAL_Y - BUFFER) * IMAGE_SCALE_FACTOR) {
+			moveSpeed = Math.max((-this.moveSpeed * ((largestRef.y - IDEAL_Y)/Math.max(IDEAL_X, ImageX - IDEAL_X)) + 0.1), 0.07);
+		    //change to smallest possible y where robot still moves
+		}
 		
-		else if(largestRef.y > (IdealY + Buffer) * ImageScaleFactor)
-			moveSpeed = Math.min((-this.moveSpeed * ((largestRef.y - IdealY)/Math.max(IdealX, ImageX - IdealX)) - 0.1), -0.07);
-		//change to biggest negative y where robot still moves
-		
-		return new double[]{turnSpeed, moveSpeed, 0};
+		else if(largestRef.y > (IDEAL_Y + BUFFER) * IMAGE_SCALE_FACTOR) {
+			moveSpeed = Math.min((-this.moveSpeed * ((largestRef.y - IDEAL_Y)/Math.max(IDEAL_X, ImageX - IDEAL_X)) - 0.1), -0.07);
+		    //change to biggest negative y where robot still moves
+		}
+
+		return new double[] {turnSpeed, moveSpeed, 0};
 	}
 
-	 public class Reflector {
-		 private double area, x , y ;
+	 private static class Reflector {
+		 private final double area, x, y;
 	
-		 public Reflector(double area, double x, double y){
+		 private Reflector(final double area, final double x, final double y){
 			 this.area = area;
 			 this.x = x;
 			 this.y = y;

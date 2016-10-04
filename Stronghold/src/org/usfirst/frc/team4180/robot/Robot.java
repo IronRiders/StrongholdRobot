@@ -24,9 +24,6 @@ public class Robot extends IterativeRobot {
 
 	private static final int DRIVING_JOYSTICK_PORT = 1;
 	private static final int SHOOTERINTAKE_JOYSTICK_PORT = 0;
-	
-	private static final int ENCODER_PORT_1 = -1;
-	private static final int ENCODER_PORT_2 = -1;
 
 	private static final String LOW_BAR_STRING = "low";
 	private static final String SPY_ZONE_STRING = "spy";
@@ -38,13 +35,10 @@ public class Robot extends IterativeRobot {
 	private final LambdaJoystick  	    shooterIntakeJoystick;
 	private final ImageRecognizer 	    imageRecognizer;
 	private final Solenoid 			    lift;
-	private final UltrasonicRangeSensor rangeSensor;
 
 	public void robotInit() {
-		rangeSensor = new UltrasonicRangeSensor(0);
 		imageRecognizer = new ImageRecognizer();
-		shooter = new Shooter(SHOOTER_VIC_PORT, SHOOTER_VIC_PORT_2,
-				SHOOTER_SOLENOID_PORT, ENCODER_PORT_1, ENCODER_PORT_2);
+		shooter = new Shooter(SHOOTER_VIC_PORT, SHOOTER_VIC_PORT_2, SHOOTER_SOLENOID_PORT);
 		driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT,
 				DRIVETRAIN_VIC_PORT_RIGHT, GEAR_SHIFTING_PORT_1,
 				GEAR_SHIFTING_PORT_2);
@@ -70,7 +64,7 @@ public class Robot extends IterativeRobot {
 	private boolean autoShooting = false;
 
 	public void autonomousInit() {
-		shooter.isShooting = false;
+		shooter.shooting = false;
 		autoShooting = true;
 		tick = 0;
 
@@ -88,7 +82,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		shooter.isShooting = false;
+		shooter.shooting = false;
 		autoShooting = false;
 		driveTrain.stop();
 	}
@@ -96,9 +90,9 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		++tick;
 		if (cas == 0 && tick < 130) {
-			driveTrain.updateSpeed(new double[] { 0, -0.75, 0 });
+			driveTrain.updateSpeed(0, -0.75, 0);
 		} else if (cas == 0 && tick > 130 && tick < 150) {
-			driveTrain.updateSpeed(new double[] { 0.75, -0.2, 0 });
+			driveTrain.updateSpeed(0.75, -0.2, 0);
 		} else {
 			if (autoShooting) {
 				IRTick();
