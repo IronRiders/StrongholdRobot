@@ -16,6 +16,11 @@ public class DriveTrain {
 		gearShifting = new DoubleSolenoid(gearShiftPort1, gearShiftPort2);
 	}
 
+	public void stop() {
+		final double[] STOPPED_SPEEDS = {0, 0, 0};
+		updateSpeed(STOPPED_SPEEDS);
+	}
+
 	//takes double array [x, y] and sets the speeds to that
 	public void updateSpeed(double[] JoystickInfo) {
 		double x = JoystickInfo[0];
