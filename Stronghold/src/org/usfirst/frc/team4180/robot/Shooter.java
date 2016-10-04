@@ -29,6 +29,10 @@ public class Shooter {
 	//	enc.setSamplesToAverage(7);
 	}
 	
+	public void stopShooterVic() {
+		setShooterVic(0);
+	}
+
 	public void setShooterVic(double shooterVicSpeed) {
 		shooterVic.set(shooterVicSpeed);
 		shooterVic2.set(shooterVicSpeed);

@@ -16,6 +16,10 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 		return (d > 0.03 || d < -0.03) ? d : 0;
 	}
 	
+	public void addButton(int buttonNum, Consumer<Boolean> toggler) {
+		addButton(buttonNum, () -> toggler.accept(true), () -> toggler.accept(false))
+	}
+
 	public void addButton(int buttonNum, Runnable onKeyDown, Runnable onKeyUp) {
 		buttons[buttonNum-1] = new Button(onKeyDown, onKeyUp);
 	}

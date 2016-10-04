@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4180.robot;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -51,17 +50,17 @@ public class Robot extends IterativeRobot {
 				GEAR_SHIFTING_PORT_2);
 		lift = new Solenoid(LIFTING_PORT);
 
-		drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, joystickInfo -> driveTrain.updateSpeed(joystickInfo));
-		drivingJoystick.addButton(2, () -> driveTrain.toggleGearShifting(), () -> {});
-		drivingJoystick.addButton(1, () -> lift.set(true), () -> lift.set(false));
+		drivingJoystick = new LambdaJoystick(DRIVING_JOYSTICK_PORT, driveTrain::updateSpeed);
+		drivingJoystick.addButton(2, driveTrain::toggleGearShifting, () -> {});
+		drivingJoystick.addButton(1, lift::set);
 
 		shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, joystickInfo -> {});
-		shooterIntakeJoystick.addButton(1, () -> autoShooting = true, () -> autoShooting = false);
-		shooterIntakeJoystick.addButton(2, () -> shooter.setShooterVic(0.3), () -> shooter.setShooterVic(0));
-		shooterIntakeJoystick.addButton(3, () -> shooter.setShooterVic(-0.4), () -> shooter.setShooterVic(0));
-		shooterIntakeJoystick.addButton(4, () ->  shooter.shoot(), () -> {});
-		shooterIntakeJoystick.addButton(5, () -> {shooter.setShooterVic(-0.9);}, () -> {shooter.setShooterVic(0);});
-		shooterIntakeJoystick.addButton(7, () -> {shooter.elevationSolenoid.set(true);}, () -> {shooter.elevationSolenoid.set(false);});
+		shooterIntakeJoystick.addButton(1, b -> autoShooting = b);
+		shooterIntakeJoystick.addButton(2, () -> shooter.setShooterVic(0.3), shooter::stopShooterVic);
+		shooterIntakeJoystick.addButton(3, () -> shooter.setShooterVic(-0.4), shooter::stopShooterVic);
+		shooterIntakeJoystick.addButton(4, shooter::shoot, () -> {});
+		shooterIntakeJoystick.addButton(5, () -> shooter.setShooterVic(-0.9), shooter::stopShooterVic);
+		shooterIntakeJoystick.addButton(7, shooter.elevationSolenoid::set;
 	}
 
 	public void autonomousInit() {
