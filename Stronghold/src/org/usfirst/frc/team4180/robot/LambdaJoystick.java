@@ -1,8 +1,9 @@
 package org.usfirst.frc.team4180.robot;
 
 import java.util.function.Consumer;
+import edu.wpi.first.wpilibj.Joystick;
 
-public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
+public class LambdaJoystick extends Joystick {
 	public Button[] buttons = new Button[11];
 	private Consumer<double[]> joystickListener;
 	
@@ -35,7 +36,7 @@ public class LambdaJoystick extends edu.wpi.first.wpilibj.Joystick {
 	}
 	
 	private static class Button {
-		public boolean currentState = false;
+		private boolean currentState = false;
 		public Runnable onKeyDown;
 		public Runnable onKeyUp;
 		

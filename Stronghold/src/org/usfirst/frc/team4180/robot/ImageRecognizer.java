@@ -7,8 +7,8 @@ private class ImageRecognizer {
 	//Where did this numbers come from?
 	private double moveSpeed = 1; //TODO: Figure out if these are being shadowed
 	private double turnSpeed = 1.1;
-	private static final double IDEAL__X = 176;
-	private static final double IDEAL__Y = 34;
+	private static final double IDEAL_X = 176;
+	private static final double IDEAL_Y = 34;
 	private static final double BUFFER = 4;
 	private static final double IMAGE_SCALE_FACTOR = 1;
 	private static final double IMAGE_X = 320 * IMAGE_SCALE_FACTOR;
@@ -21,13 +21,13 @@ private class ImageRecognizer {
 	//returns all reflectors found in the grip contours report
 	private Reflector[] getReflectors() {
 		final double[] areas = table.getNumberArray("area", new double[0]);
-		final double[] x = table.getNumberArray("centerX", new double[0]);
-		final double[] y = table.getNumberArray("centerY", new double[0]);
+		final double[] xs = table.getNumberArray("centerX", new double[0]);
+		final double[] ys = table.getNumberArray("centerY", new double[0]);
 		
 		final Reflector[] reflectors = new Reflector[areas.length];
 		
 		for(int i = 0; i < areas.length; i++) {
-			reflectors[i] = new Reflector(areas[i], x[i], y[i]);
+			reflectors[i] = new Reflector(areas[i], xs[i], ys[i]);
 		}
 		return reflectors;
 	}
@@ -56,7 +56,7 @@ private class ImageRecognizer {
 		double turnSpeed = 0; //ω
 		double moveSpeed = 0; //v
 		
-		if(largestRef.x < (IX - BUFFER) * IMAGE_SCALE_FACTOR) {
+		if(largestRef.x < (IDEAL_X - BUFFER) * IMAGE_SCALE_FACTOR) {
 			turnSpeed =  Math.min((this.turnSpeed * ((largestRef.x - IDEAL_X)/Math.max(IDEAL_X, ImageX - IDEAL_X)) - 0.07), -0.25);
 		    //change to biggest negative x where robot still turns
 		}

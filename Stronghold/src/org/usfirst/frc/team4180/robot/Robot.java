@@ -29,19 +29,23 @@ public class Robot extends IterativeRobot {
 	private static final String SPY_ZONE_STRING = "spy";
 	
 	//Class-level controls
-	private final Shooter 			    shooter;
-	private final DriveTrain 			driveTrain;
-	private final LambdaJoystick  	    drivingJoystick;
-	private final LambdaJoystick  	    shooterIntakeJoystick;
-	private final ImageRecognizer 	    imageRecognizer;
-	private final Solenoid 			    lift;
+	private final Shooter               shooter;
+	private final DriveTrain            driveTrain;
+	private final LambdaJoystick        drivingJoystick;
+	private final LambdaJoystick        shooterIntakeJoystick;
+	private final ImageRecognizer       imageRecognizer;
+	private final Solenoid              lift;
+
+	//Autoshooting state
+	private int cas;
+	private int tick;
+	private boolean autoShooting;
 
 	public void robotInit() {
 		imageRecognizer = new ImageRecognizer();
 		shooter = new Shooter(SHOOTER_VIC_PORT, SHOOTER_VIC_PORT_2, SHOOTER_SOLENOID_PORT);
-		driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT,
-				DRIVETRAIN_VIC_PORT_RIGHT, GEAR_SHIFTING_PORT_1,
-				GEAR_SHIFTING_PORT_2);
+		driveTrain = new DriveTrain(DRIVETRAIN_VIC_PORT_LEFT, DRIVETRAIN_VIC_PORT_RIGHT,
+									GEAR_SHIFTING_PORT_1, GEAR_SHIFTING_PORT_2);
 		lift = new Solenoid(LIFTING_PORT);
 
 		//Joystick Logic
@@ -51,22 +55,18 @@ public class Robot extends IterativeRobot {
 
 		shooterIntakeJoystick = new LambdaJoystick(SHOOTERINTAKE_JOYSTICK_PORT, joystickInfo -> {});
 		shooterIntakeJoystick.addButton(1, b -> autoShooting = b);
-		shooterIntakeJoystick.addButton(2, () -> shooter.setShooterVic(0.3), shooter::stopShooterVic);
-		shooterIntakeJoystick.addButton(3, () -> shooter.setShooterVic(-0.4), shooter::stopShooterVic);
+		shooterIntakeJoystick.addButton(2, () -> shooter.setShooterVic(0.3), shooter::stopShooting);
+		shooterIntakeJoystick.addButton(3, () -> shooter.setShooterVic(-0.4), shooter::stopShooting);
 		shooterIntakeJoystick.addButton(4, shooter::shoot, () -> {});
-		shooterIntakeJoystick.addButton(5, () -> shooter.setShooterVic(-0.9), shooter::stopShooterVic);
-		shooterIntakeJoystick.addButton(7, shooter.elevationSolenoid::set;
+		shooterIntakeJoystick.addButton(5, () -> shooter.setShooterVic(-0.9), shooter::stopShooting);
+		shooterIntakeJoystick.addButton(7, shooter.elevationSolenoid::set);
 	}
-
-	//Autoshooting state
-	private int cas = 0;
-	private int tick = 0;
-	private boolean autoShooting = false;
 
 	public void autonomousInit() {
 		shooter.shooting = false;
 		autoShooting = true;
 		tick = 0;
+		cas = 0;
 
 		SmartDashboard.putString("DB/String 4", "Enter \"spy\" or \"low\"");
 		final String autoMode = SmartDashboard.getString("DB/String 0", LOW_BAR_STRING);
@@ -88,7 +88,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousPeriodic() {
-		++tick;
+		tick++;
 		if (cas == 0 && tick < 130) {
 			driveTrain.updateSpeed(0, -0.75, 0);
 		} else if (cas == 0 && tick > 130 && tick < 150) {
@@ -119,7 +119,7 @@ public class Robot extends IterativeRobot {
 			driveTrain.stop();
 		} else {
 			boolean inShootingRange = tolerate(driveInfo[0], minSpeed) == 0
-			    				   && tolerate(driveInfo[1], minSpeed) == 0
+			                       && tolerate(driveInfo[1], minSpeed) == 0
 			                       && tolerate(driveInfo[2], minSpeed) == 0;
 			if (inShootingRange) {
 				shooter.shoot();
