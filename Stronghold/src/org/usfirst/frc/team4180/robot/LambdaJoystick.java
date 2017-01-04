@@ -13,7 +13,7 @@ public class LambdaJoystick extends Joystick {
 	}
 	
 	public void addButton(int buttonNum, Consumer<Boolean> toggler) {
-		addButton(buttonNum, () -> toggler.accept(true), () -> toggler.accept(false))
+		addButton(buttonNum, () -> toggler.accept(true), () -> toggler.accept(false));
 	}
 
 	public void addButton(int buttonNum, Runnable onKeyDown, Runnable onKeyUp) {
