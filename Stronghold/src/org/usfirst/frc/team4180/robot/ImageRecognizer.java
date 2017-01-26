@@ -14,7 +14,7 @@ private class ImageRecognizer {
 	private static final double IMAGE_X = 320 * IMAGE_SCALE_FACTOR;
 	private static final double IMAGE_Y = 240 * IMAGE_SCALE_FACTOR;
 
-	private ImageRecognizer() {
+	public ImageRecognizer() {
 		table = NetworkTable.getTable("GRIP/myContoursReport");
 	}
 
